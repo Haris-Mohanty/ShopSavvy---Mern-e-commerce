@@ -41,9 +41,12 @@ const Header = () => {
               <FaRegUserCircle size={26} title="Profile" />
             </div>
             <div>
-              <button className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white px-3 py-1 rounded-full shadow-md hover:shadow-xl focus:outline-none">
+              <Link
+                to={"/login"}
+                className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white px-3 py-2 rounded-full shadow-md hover:shadow-xl focus:outline-none"
+              >
                 Login
-              </button>
+              </Link>
             </div>
           </div>
         </div>
