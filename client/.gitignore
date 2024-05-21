@@ -11,6 +11,12 @@
 # production
 /build
 
+# environmental variable
+.env
+
+# assets
+/src/Assets
+
 # misc
 .DS_Store
 .env.local
