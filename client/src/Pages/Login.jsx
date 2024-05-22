@@ -1,13 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import savvy from "../Assets/savvy.png";
 import { Link } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handlePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <>
       <section id="login">
-        <div className="container mx-auto p-4 rounded-full">
-          <div className="bg-white p-2 w-full max-w-sm mx-auto">
+        <div className="container mx-auto py-4 px-2">
+          <div className="bg-white p-3 w-full max-w-sm mx-auto rounded-lg shadow-2xl">
             <div className="mb-6 text-center mt-5">
               <img src={savvy} alt="login" className="mx-auto" />
               <h2 className="text-2xl font-semibold text-gray-700 mt-6">
@@ -30,7 +37,7 @@ const Login = () => {
                   placeholder="Enter your email"
                 />
               </div>
-              <div>
+              <div className="relative">
                 <label
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-600 mb-2"
@@ -38,15 +45,25 @@ const Login = () => {
                   Password
                 </label>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   placeholder="Enter your password"
                 />
+                <button
+                  type="button"
+                  className="absolute right-2 top-10 text-gray-500"
+                  onClick={handlePasswordVisibility}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
               </div>
               <div className="flex items-center justify-end">
                 <div className="text-sm font-semibold">
-                  <button type="button" className="text-indigo-500 hover:underline">
+                  <button
+                    type="button"
+                    className="text-indigo-500 hover:underline"
+                  >
                     Forgot Password?
                   </button>
                 </div>
