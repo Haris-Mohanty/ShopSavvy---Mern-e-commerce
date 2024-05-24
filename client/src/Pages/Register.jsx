@@ -3,11 +3,15 @@ import savvy from "../Assets/savvy.png";
 import { Link } from "react-router-dom";
 import { FaEye, FaEyeSlash, FaUpload } from "react-icons/fa";
 import uploadProfilePic from "../Assets/signin.gif";
+import { registerUserApi } from "../api/api";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [profilePic, setProfilePic] = useState(null);
   const [profilePicPreview, setProfilePicPreview] = useState(uploadProfilePic);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   // ************ PASSWORD SHOW & HIDE ********/
   const handlePasswordVisibility = () => {
@@ -24,6 +28,18 @@ const Register = () => {
         setProfilePicPreview(reader.result); // Base64 encoded string
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  // ************ REGISTER USER **************/
+  const submitRegisterUserForm = async (e) => {
+    e.preventDefault();
+    const data = { name, email, password };
+    try {
+      const res = await registerUserApi(data);
+      console.log(res);
+    } catch (err) {
+      console.log(err.response.data.message);
     }
   };
 
@@ -57,13 +73,12 @@ const Register = () => {
                 id="profilePicInput"
                 className="hidden"
                 accept="image/*"
-                required
                 onChange={handleUploadProfilePhoto}
               />
             </div>
 
             {/***************** REGISTER FORM ***********/}
-            <form className="space-y-4 mt-2">
+            <form onSubmit={submitRegisterUserForm} className="space-y-4 mt-2">
               {/***************** NAME ***********/}
               <div>
                 <label
@@ -75,9 +90,10 @@ const Register = () => {
                 <input
                   type="text"
                   id="name"
-                  required
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   placeholder="Enter your full name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                 />
               </div>
 
@@ -92,9 +108,10 @@ const Register = () => {
                 <input
                   type="email"
                   id="email"
-                  required
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
 
@@ -109,9 +126,10 @@ const Register = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
-                  required
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
                   type="button"

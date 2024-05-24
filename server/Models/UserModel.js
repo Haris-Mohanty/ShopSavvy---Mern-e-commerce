@@ -26,11 +26,7 @@ const userSchema = new mongoose.Schema(
     },
     profilePhoto: {
       type: String,
-      required: [true, "Profile photo is required"],
-      validate: [
-        validator.isURL,
-        "Please enter a valid URL for the profile photo",
-      ],
+      default: "",
     },
   },
   { timestamps: true }
