@@ -2,12 +2,28 @@ import React, { useState } from "react";
 import savvy from "../Assets/savvy.png";
 import { Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { loginUserApi } from "../api/api";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
+  // ********** PASSWORD SHOW & HIDE *********/
   const handlePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  //**************** LOGIN USER *********/
+  const submitLoginUserForm = async (e) => {
+    e.preventDefault();
+    const data = { email, password };
+    try {
+      const res = await loginUserApi(data);
+      console.log(res);
+    } catch (err) {
+      console.log(err?.response?.data?.message);
+    }
   };
 
   return (
@@ -22,7 +38,7 @@ const Login = () => {
               </h2>
               <p className="text-gray-500">Please login to your account</p>
             </div>
-            <form className="space-y-4 mt-5">
+            <form onSubmit={submitLoginUserForm} className="space-y-4 mt-5">
               <div>
                 <label
                   htmlFor="email"
@@ -35,6 +51,8 @@ const Login = () => {
                   id="email"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="relative">
@@ -49,6 +67,8 @@ const Login = () => {
                   id="password"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
                   type="button"

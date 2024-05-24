@@ -39,7 +39,7 @@ const Register = () => {
       const res = await registerUserApi(data);
       console.log(res);
     } catch (err) {
-      console.log(err.response.data.message);
+      console.log(err?.response?.data?.message);
     }
   };
 
