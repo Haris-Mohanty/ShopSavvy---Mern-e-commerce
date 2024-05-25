@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import savvy from "../Assets/savvy.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash, FaUpload } from "react-icons/fa";
 import uploadProfilePic from "../Assets/signin.gif";
 import { registerUserApi } from "../api/api";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,6 +13,8 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   // ************ PASSWORD SHOW & HIDE ********/
   const handlePasswordVisibility = () => {
@@ -37,9 +40,12 @@ const Register = () => {
     const data = { name, email, password };
     try {
       const res = await registerUserApi(data);
-      console.log(res);
+      if (res.success) {
+        toast.success(res.message);
+        navigate("/login");
+      }
     } catch (err) {
-      console.log(err?.response?.data?.message);
+      toast.error(err?.response?.data?.message);
     }
   };
 

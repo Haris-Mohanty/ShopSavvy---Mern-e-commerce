@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import savvy from "../Assets/savvy.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { loginUserApi } from "../api/api";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   // ********** PASSWORD SHOW & HIDE *********/
   const handlePasswordVisibility = () => {
@@ -20,9 +23,12 @@ const Login = () => {
     const data = { email, password };
     try {
       const res = await loginUserApi(data);
-      console.log(res);
+      if (res.success) {
+        toast.success("Login Success!");
+        navigate("/");
+      }
     } catch (err) {
-      console.log(err?.response?.data?.message);
+      toast.error(err?.response?.data?.message);
     }
   };
 

@@ -121,16 +121,23 @@ export const loginUser = async (req, res) => {
     }
 
     // Generate Token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
 
     // Login Success
-    return res.status(200).json({
-      success: true,
-      user,
-      token,
-    });
+    return res
+      .cookie("token", token, { httpOnly: true, secure: true })
+      .status(200)
+      .json({
+        success: true,
+        user,
+        token,
+      });
   } catch (err) {
     return res.status(500).json({
       success: false,
