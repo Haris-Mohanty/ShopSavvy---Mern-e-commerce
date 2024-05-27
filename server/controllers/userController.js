@@ -149,3 +149,16 @@ export const loginUser = async (req, res) => {
     });
   }
 };
+
+// *************** GET USER DETAILS CONTROLLER ***************/
+export const getUserDetailsController = async (req, res) => {
+  try {
+    console.log("object");
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error!",
+      error: err.message,
+    });
+  }
+};

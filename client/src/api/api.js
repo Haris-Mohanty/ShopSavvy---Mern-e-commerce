@@ -38,3 +38,20 @@ export const loginUserApi = async (data) => {
     throw err;
   }
 };
+
+// *************** GET USER DETAILS ****************/
+export const getUserDetails = async () => {
+  try {
+    const response = await axios.get("/users/user-details", {
+      withCredentials: true,
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
