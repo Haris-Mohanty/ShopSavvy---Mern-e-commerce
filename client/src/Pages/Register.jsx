@@ -5,6 +5,8 @@ import { FaEye, FaEyeSlash, FaUpload } from "react-icons/fa";
 import uploadProfilePic from "../Assets/signin.gif";
 import { registerUserApi } from "../api/api";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { hideLoading, showLoading } from "../redux/spinnerSlice";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +17,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // ************ PASSWORD SHOW & HIDE ********/
   const handlePasswordVisibility = () => {
@@ -40,11 +43,14 @@ const Register = () => {
     const data = { name, email, password };
     try {
       const res = await registerUserApi(data);
+      dispatch(showLoading());
       if (res.success) {
+        dispatch(hideLoading());
         toast.success(res.message);
         navigate("/login");
       }
     } catch (err) {
+      dispatch(hideLoading());
       toast.error(err?.response?.data?.message);
     }
   };

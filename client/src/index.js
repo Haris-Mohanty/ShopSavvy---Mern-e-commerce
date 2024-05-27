@@ -5,13 +5,17 @@ import reportWebVitals from "./reportWebVitals";
 import { RouterProvider } from "react-router-dom";
 import router from "./routes/route";
 import axios from "axios";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );
 

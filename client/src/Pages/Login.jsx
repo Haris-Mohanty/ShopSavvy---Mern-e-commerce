@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { loginUserApi } from "../api/api";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { showLoading, hideLoading } from "../redux/spinnerSlice";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,6 +13,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // ********** PASSWORD SHOW & HIDE *********/
   const handlePasswordVisibility = () => {
@@ -22,12 +25,15 @@ const Login = () => {
     e.preventDefault();
     const data = { email, password };
     try {
+      dispatch(showLoading());
       const res = await loginUserApi(data);
+      dispatch(hideLoading());
       if (res.success) {
         toast.success("Login Success!");
         navigate("/");
       }
     } catch (err) {
+      dispatch(hideLoading());
       toast.error(err?.response?.data?.message);
     }
   };
