@@ -131,7 +131,10 @@ export const loginUser = async (req, res) => {
 
     // Login Success
     return res
-      .cookie("token", token, { httpOnly: true, secure: true })
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+      })
       .status(200)
       .json({
         success: true,
