@@ -153,7 +153,29 @@ export const loginUser = async (req, res) => {
 // *************** GET USER DETAILS CONTROLLER ***************/
 export const getUserDetailsController = async (req, res) => {
   try {
-    console.log("object");
+    const userId = req.user;
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized Access!",
+      });
+    }
+
+    // Get user
+    const user = await UserModel.findById(userId).select("-password");
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found!",
+      });
+    }
+
+    // Success response
+    return res.status(200).json({
+      success: true,
+      message:"User details fetched successfully!",
+      user,
+    });
   } catch (err) {
     return res.status(500).json({
       success: false,
