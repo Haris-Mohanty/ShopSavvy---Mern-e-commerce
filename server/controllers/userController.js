@@ -6,7 +6,7 @@ import UserModel from "../Models/UserModel.js";
 // ******************** REGISTER USER ***************/
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, profilePic } = req.body;
 
     // Validation
     if (!name || !email || !password) {
@@ -40,6 +40,14 @@ export const registerUser = async (req, res) => {
       });
     }
 
+    // Profile photo validation
+    if (!profilePic) {
+      return res.status(422).json({
+        success: false,
+        message: "Please provide a profile photo.",
+      });
+    }
+
     // Check existing user
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
@@ -58,6 +66,7 @@ export const registerUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      profilePhoto: profilePic,
     });
     await user.save();
     return res.status(201).json({

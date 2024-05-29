@@ -10,11 +10,13 @@ import { hideLoading, showLoading } from "../redux/spinnerSlice";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [profilePic, setProfilePic] = useState(null);
   const [profilePicPreview, setProfilePicPreview] = useState(uploadProfilePic);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [data, setData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    profilePic: "",
+  });
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -24,28 +26,67 @@ const Register = () => {
     setShowPassword(!showPassword);
   };
 
-  // ********** PROFILE PHOTO UPLOAD ********/
-  const handleUploadProfilePhoto = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfilePic(file);
-        setProfilePicPreview(reader.result); // Base64 encoded string
+  // ********* SET VALUE **********/
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+
+    setData((preve) => {
+      return {
+        ...preve,
+        [name]: value,
       };
-      reader.readAsDataURL(file);
-    }
+    });
   };
 
-  // ************ REGISTER USER **************/
+  // **************** CONVERT IMAGE TO BASE 64 *************/
+  const imageTobase64 = async (image) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(image);
+
+    const data = await new Promise((resolve, reject) => {
+      reader.onload = () => resolve(reader.result);
+      
+      reader.onerror = (error) => reject(error);
+    });
+
+    return data;
+  };
+
+  // **************** PROFILE PHOTO UPLOAD *****************/
+  const handleUploadProfilePhoto = async (e) => {
+    const file = e.target.files[0];
+
+    // Check if file type is either JPG or PNG
+    if (file.type !== "image/jpeg" && file.type !== "image/png") {
+      toast.error("Please upload a JPG or PNG image.");
+      return;
+    }
+
+    // Check if file size is under 100KB
+    if (file.size > 100 * 1024) {
+      toast.error("Please upload an image under 100KB.");
+      return;
+    }
+
+    const imagePic = await imageTobase64(file);
+    setProfilePicPreview(imagePic);
+
+    setData((preve) => {
+      return {
+        ...preve,
+        profilePic: imagePic,
+      };
+    });
+  };
+
+  // ***************** REGISTER USER **********************/
   const submitRegisterUserForm = async (e) => {
     e.preventDefault();
-    const data = { name, email, password };
     try {
-      const res = await registerUserApi(data);
       dispatch(showLoading());
+      const res = await registerUserApi(data);
+      dispatch(hideLoading());
       if (res.success) {
-        dispatch(hideLoading());
         toast.success(res.message);
         navigate("/login");
       }
@@ -102,10 +143,11 @@ const Register = () => {
                 <input
                   type="text"
                   id="name"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  name="name"
+                  value={data.name}
+                  onChange={handleOnChange}
                   placeholder="Enter your full name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
@@ -120,10 +162,11 @@ const Register = () => {
                 <input
                   type="email"
                   id="email"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  name="email"
+                  value={data.email}
+                  onChange={handleOnChange}
                   placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
@@ -138,10 +181,11 @@ const Register = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  name="password"
+                  value={data.password}
+                  onChange={handleOnChange}
                   placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
                 <button
                   type="button"
