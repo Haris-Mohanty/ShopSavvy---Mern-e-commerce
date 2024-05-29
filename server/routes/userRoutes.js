@@ -3,6 +3,7 @@ import {
   loginUser,
   registerUser,
   getUserDetailsController,
+  logoutController,
 } from "../controllers/userController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 
@@ -17,6 +18,9 @@ router.post("/login", loginUser);
 
 // Get user details
 router.get("/user-details", authMiddleware, getUserDetailsController);
+
+// Logout user
+router.get("/logout", authMiddleware, logoutController);
 
 //Export
 export default router;

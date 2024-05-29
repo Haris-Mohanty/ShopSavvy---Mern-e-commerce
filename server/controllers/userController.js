@@ -173,9 +173,32 @@ export const getUserDetailsController = async (req, res) => {
     // Success response
     return res.status(200).json({
       success: true,
-      message:"User details fetched successfully!",
+      message: "User details fetched successfully!",
       user,
     });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error!",
+      error: err.message,
+    });
+  }
+};
+
+// *************** LOGOUT USER CONTROLLER ***************/
+export const logoutController = async (req, res) => {
+  try {
+    return res
+      .cookie("token", "", {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+        secure: true,
+      })
+      .status(200)
+      .json({
+        message: "User Logged out Successfully!",
+        success: true,
+      });
   } catch (err) {
     return res.status(500).json({
       success: false,
