@@ -52,7 +52,7 @@ const Header = () => {
             </div>
           </div>
 
-          {/************  CART AND AUTHENTICATION *************/}
+          {/************  CART AND USER PROFILE *************/}
           <div className="flex items-center space-x-4">
             <div className="text-indigo-500 cursor-pointer relative">
               <span>
@@ -75,17 +75,32 @@ const Header = () => {
               ) : (
                 <FaRegUserCircle size={26} title="Profile" />
               )}
+              {/********* SHOW POPUP OF ADMIN PANEL ****************/}
               {isProfileMenuOpen && (
                 <div className="absolute -right-10 top-10 w-32 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                  <Link
-                    to="/admin"
-                    className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                  >
-                    Admin Panel
-                  </Link>
+                  {user?._id ? (
+                    <Link
+                      to="admin"
+                      className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                    >
+                      Admin Panel
+                    </Link>
+                  ) : (
+                    <p
+                      onClick={() => {
+                        toast.error(
+                          "Please login first to access admin panel."
+                        );
+                      }}
+                      className="block px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer"
+                    >
+                      Admin Panel
+                    </p>
+                  )}
                 </div>
               )}
             </div>
+            {/************** LOGIN AND LOGOUT HANDLER ***********/}
             {user?._id ? (
               <button
                 onClick={handleLogout}

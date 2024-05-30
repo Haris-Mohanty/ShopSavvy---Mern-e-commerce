@@ -5,6 +5,9 @@ import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import ProtectedRoutes from "./ProtectedRoutes";
 import PublicRoutes from "./PublicRoutes";
+import AdminPanel from "../Pages/AdminPanel";
+import AllUsers from "../Pages/AllUsers";
+import AllProducts from "../Pages/AllProducts";
 
 // Create Routes
 const router = createBrowserRouter([
@@ -21,7 +24,19 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/login",
+        path: "admin",
+        element: (
+          <ProtectedRoutes>
+            <AdminPanel />
+          </ProtectedRoutes>
+        ),
+        children: [
+          { path: "all-users", element: <AllUsers /> },
+          { path: "all-products", element: <AllProducts /> },
+        ],
+      },
+      {
+        path: "login",
         element: (
           <PublicRoutes>
             <Login />
@@ -29,7 +44,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/register",
+        path: "register",
         element: (
           <PublicRoutes>
             <Register />

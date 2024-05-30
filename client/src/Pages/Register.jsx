@@ -63,8 +63,8 @@ const Register = () => {
     }
 
     // Check if file size is under 100KB
-    if (file.size > 100 * 1024) {
-      toast.error("Please upload an image under 100KB.");
+    if (file.size > 75 * 1024) {
+      toast.error("Please upload an image under 75KB.");
       return;
     }
 
@@ -93,6 +93,7 @@ const Register = () => {
     } catch (err) {
       dispatch(hideLoading());
       toast.error(err?.response?.data?.message);
+      console.log(err);
     }
   };
 
