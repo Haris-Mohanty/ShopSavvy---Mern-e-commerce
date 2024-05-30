@@ -1,18 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../Assets/logo.png";
 import { Link } from "react-router-dom";
 import { TbShoppingCartSearch } from "react-icons/tb";
 import { FaRegUserCircle } from "react-icons/fa";
 import { HiOutlineShoppingCart } from "react-icons/hi";
+import { useDispatch, useSelector } from "react-redux";
+import { hideLoading, showLoading } from "../redux/spinnerSlice";
+import { logoutUser } from "../api/api";
+import { clearUser } from "../redux/userSlice";
+import { toast } from "react-toastify";
 
 const Header = () => {
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+
+  // ********** USER LOGOUT *******/
+  const handleLogout = async () => {
+    try {
+      dispatch(showLoading());
+      const res = await logoutUser();
+      dispatch(hideLoading());
+      if (res.success) {
+        dispatch(clearUser());
+        toast.success("User logged out successfully!");
+      }
+    } catch (err) {
+      dispatch(hideLoading());
+      toast.error(err?.response?.data?.message);
+    }
+  };
+
   return (
     <>
       <header className="bg-white h-16 shadow-md">
         <div className="container mx-auto h-full flex items-center justify-between lg:px-8 px-2">
           {/************  LOGO *************/}
           <Link to={"/"}>
-            <img src={logo} className="w-48 h-7" alt="Shop Savvy" />
+            <img src={logo} className="w-32 h-7 md:w-48" alt="Shop Savvy" />
           </Link>
 
           {/************  SEARCH BAR *************/}
@@ -28,26 +53,54 @@ const Header = () => {
           </div>
 
           {/************  CART AND AUTHENTICATION *************/}
-          <div className="flex space-x-4">
+          <div className="flex items-center space-x-4">
             <div className="text-indigo-500 cursor-pointer relative">
               <span>
                 <HiOutlineShoppingCart size={26} title="Cart" />
               </span>
-              <div className="bg-indigo-600 text-white w-5 h-5 rounded-full p-1 flex items-center justify-center absolute -top-2 -right-2">
+              <div className="bg-indigo-600 text-white w-5 h-5 rounded-full flex items-center justify-center absolute -top-2 -right-2">
                 <p className="text-xs">0</p>
               </div>
             </div>
-            <div className="text-indigo-500 cursor-pointer">
-              <FaRegUserCircle size={26} title="Profile" />
+            <div
+              className="text-indigo-500 cursor-pointer flex items-center relative"
+              onClick={() => setIsProfileMenuOpen((prev) => !prev)}
+            >
+              {user?.profilePhoto ? (
+                <img
+                  src={user?.profilePhoto}
+                  alt={user?.name}
+                  className="h-8 w-8 rounded-full"
+                />
+              ) : (
+                <FaRegUserCircle size={26} title="Profile" />
+              )}
+              {isProfileMenuOpen && (
+                <div className="absolute -right-10 top-10 w-32 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                  <Link
+                    to="/admin"
+                    className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                  >
+                    Admin Panel
+                  </Link>
+                </div>
+              )}
             </div>
-            <div>
+            {user?._id ? (
+              <button
+                onClick={handleLogout}
+                className="bg-gradient-to-r from-red-600 to-red-700 text-white px-3 py-2 rounded-full shadow-md hover:shadow-xl focus:outline-none"
+              >
+                Logout
+              </button>
+            ) : (
               <Link
                 to={"/login"}
                 className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white px-3 py-2 rounded-full shadow-md hover:shadow-xl focus:outline-none"
               >
                 Login
               </Link>
-            </div>
+            )}
           </div>
         </div>
       </header>

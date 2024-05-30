@@ -55,3 +55,20 @@ export const getUserDetails = async () => {
     throw err;
   }
 };
+
+// *************** USER LOGOUT ****************/
+export const logoutUser = async () => {
+  try {
+    const response = await axios.get("/users/logout", {
+      withCredentials: true,
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
