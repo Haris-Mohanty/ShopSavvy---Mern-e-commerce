@@ -6,6 +6,7 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import connectDB from "./database/db.js";
 import userRoutes from "./routes/userRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 
 // **** Dotenv Config ****/
 dotenv.config();
@@ -30,6 +31,7 @@ app.use(cookieParser());
 
 // ***** Middleware Routes *****/
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/admin", adminRoutes);
 
 // ********* Port & Listen *********/
 const port = process.env.PORT || 8080;
