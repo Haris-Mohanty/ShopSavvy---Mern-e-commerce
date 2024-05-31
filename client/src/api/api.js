@@ -89,3 +89,20 @@ export const getAllUsers = async () => {
     throw err;
   }
 };
+
+// *************** UPDATE USER ****************/
+export const updateUser = async (id, data) => {
+  try {
+    const response = await axios.put(`/admin/update-user/${id}`, data, {
+      withCredentials: true,
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};

@@ -81,7 +81,7 @@ const Header = () => {
                   {user?._id ? (
                     <Link
                       to="admin"
-                      className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                      className="block px-4 py-2 text-gray-800 hidden md:block hover:bg-gray-100"
                     >
                       Admin Panel
                     </Link>

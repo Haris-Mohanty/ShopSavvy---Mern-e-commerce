@@ -1,17 +1,17 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { FaRegUserCircle, FaUsers, FaUpload } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 const AdminPanel = () => {
   const { user } = useSelector((state) => state.user);
   return (
     <>
-      <div className="min-h-[calc(100vh-100px)] flex">
+      <div className="min-h-[calc(100vh-100px)] md:flex hidden">
         {/****************** SIDEBAR SECTION ****************/}
         <aside className="bg-white w-full min-h-full max-w-60 customShadow">
           <div className="h-36 flex justify-center items-center flex-col">
-            <div className="text-indigo-500 cursor-pointer flex justify-center">
+            <div className="text-indigo-500 flex justify-center">
               {user?.profilePhoto ? (
                 <img
                   src={user?.profilePhoto}
@@ -35,7 +35,7 @@ const AdminPanel = () => {
             <ul>
               <li className="py-2 px-4 flex items-center hover:bg-gray-200">
                 <Link
-                  to="/all-users"
+                  to="all-users"
                   className="text-indigo-600 flex items-center space-x-2"
                 >
                   <FaUsers />
@@ -44,18 +44,18 @@ const AdminPanel = () => {
               </li>
               <li className="py-2 px-4 flex items-center hover:bg-gray-200">
                 <Link
-                  to="/upload-products"
+                  to="all-products"
                   className="text-indigo-600 flex items-center space-x-2"
                 >
                   <FaUpload />
-                  <span>Upload Products</span>
+                  <span>All Products</span>
                 </Link>
               </li>
             </ul>
           </nav>
         </aside>
         {/****************** MAIN SECTION ****************/}
-        <main>Main</main>
+        <main className="w-full h-full p-4">{<Outlet />}</main>
       </div>
     </>
   );

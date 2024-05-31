@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../redux/spinnerSlice";
-import { getAllUsers } from "../api/api";
+import { getAllUsers, updateUser } from "../api/api";
 import { CiSearch } from "react-icons/ci";
 import { FaUserCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -37,7 +37,18 @@ const AllUsers = () => {
   const handleUpdateUser = async (e) => {
     e.preventDefault();
     const data = { name, email, isAdmin };
-    console.log(data);
+    try {
+      dispatch(showLoading());
+      const res = await updateUser(selectedUser._id, data);
+      dispatch(hideLoading());
+      if (res.success) {
+        fetchAllUsers();
+        setIsModalOpen(false);
+      }
+    } catch (err) {
+      dispatch(hideLoading());
+      toast.error(err?.response?.data?.message);
+    }
   };
 
   //********* SEARCH USER **************/
