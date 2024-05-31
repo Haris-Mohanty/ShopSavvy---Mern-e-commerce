@@ -14,11 +14,36 @@ export const getAllUserController = async (req, res) => {
       });
     }
 
-    const allUsers = await UserModel.find({});
+    // Pagination
+    const page = parseInt(req.query.page) || 1;
+    const limit = 6;
+
+    //Calculate skip value
+    const skip = (page - 1) * limit;
+
+    // Search
+    const filters = {};
+
+    // Get total user for counting total page
+    const totalUser = await UserModel.countDocuments(filters);
+    const totalPages = Math.ceil(totalUser / limit);
+    if (page > totalPages) {
+      return res.status(404).json({
+        success: false,
+        message: "Page not Found!",
+      });
+    }
+
+    const allUsers = await UserModel.find(filters)
+      .skip(skip)
+      .limit(limit)
+      .select('-password');
 
     return res.status(200).json({
       success: true,
-      totalUsers: allUsers.length,
+      totalUsers: totalUser,
+      totalPages: totalPages,
+      currentPage: page,
       allUsers,
     });
   } catch (err) {

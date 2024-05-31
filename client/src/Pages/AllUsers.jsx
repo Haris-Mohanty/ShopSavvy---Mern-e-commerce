@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../redux/spinnerSlice";
-import { getAllUsers, updateUser } from "../api/api";
+import { deleteUser, getAllUsers, updateUser } from "../api/api";
 import { CiSearch } from "react-icons/ci";
 import { FaUserCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { IoCloseSharp } from "react-icons/io5";
 import moment from "moment";
+import { GoArrowLeft, GoArrowRight } from "react-icons/go";
 
 const AllUsers = () => {
   const dispatch = useDispatch();
@@ -16,16 +17,21 @@ const AllUsers = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [isAdmin, setIsAdmin] = useState(Boolean);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   // ******** FETCH ALL USERS ************/
-  const fetchAllUsers = async () => {
+  const fetchAllUsers = async (page) => {
     try {
       dispatch(showLoading());
-      const res = await getAllUsers();
+      const res = await getAllUsers(page); //pass page for API call
       dispatch(hideLoading());
       if (res.success) {
         setAllUsers(res.allUsers);
+        setTotalPages(res.totalPages);
+        setCurrentPage(res.currentPage);
       }
     } catch (err) {
       dispatch(hideLoading());
@@ -42,8 +48,26 @@ const AllUsers = () => {
       const res = await updateUser(selectedUser._id, data);
       dispatch(hideLoading());
       if (res.success) {
-        fetchAllUsers();
         setIsModalOpen(false);
+        toast.success(res?.message);
+        fetchAllUsers();
+      }
+    } catch (err) {
+      dispatch(hideLoading());
+      toast.error(err?.response?.data?.message);
+    }
+  };
+
+  // ******** DELETE USER ************/
+  const handleDeleteUser = async () => {
+    try {
+      dispatch(showLoading());
+      const res = await deleteUser(selectedUser._id);
+      dispatch(hideLoading());
+      if (res.success) {
+        setIsModalOpen(false);
+        toast.success(res?.message);
+        fetchAllUsers();
       }
     } catch (err) {
       dispatch(hideLoading());
@@ -71,10 +95,18 @@ const AllUsers = () => {
     setSelectedUser(null);
   };
 
+  // Pagination handler
+  const nextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+  const prevPage = () => {
+    setCurrentPage((prevPage) => prevPage - 1);
+  };
+
   useEffect(() => {
-    fetchAllUsers();
+    fetchAllUsers(currentPage);
     //eslint-disable-next-line
-  }, []);
+  }, [currentPage]);
 
   return (
     <>
@@ -268,6 +300,7 @@ const AllUsers = () => {
                     <button
                       type="button"
                       className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      onClick={handleDeleteUser}
                     >
                       Delete User
                     </button>
@@ -277,6 +310,45 @@ const AllUsers = () => {
             </div>
           </div>
         )}
+      </div>
+
+      {/**************** PAGINATION ********************/}
+      <div className="flex justify-end mt-3 gap-4">
+        <button
+          className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+          type="button"
+          onClick={prevPage}
+          disabled={currentPage === 1}
+        >
+          <GoArrowLeft size={20} />
+          Previous
+        </button>
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+          <button
+            key={number}
+            className={`relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg ${
+              currentPage === number
+                ? "bg-gray-900 text-white"
+                : "bg-white text-gray-900 dark:text-gray-400"
+            } text-center align-middle font-sans text-xs font-medium uppercase shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`}
+            type="button"
+            onClick={() => fetchAllUsers(number)}
+          >
+            <span className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+              {number}
+            </span>
+          </button>
+        ))}
+
+        <button
+          className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+          type="button"
+          onClick={nextPage}
+          disabled={currentPage === totalPages}
+        >
+          Next
+          <GoArrowRight size={20} />
+        </button>
       </div>
     </>
   );

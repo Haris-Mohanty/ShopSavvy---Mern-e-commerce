@@ -74,9 +74,9 @@ export const logoutUser = async () => {
 };
 
 // *************** GET ALL USERS ****************/
-export const getAllUsers = async () => {
+export const getAllUsers = async (page) => {
   try {
-    const response = await axios.get("/admin/get-all-users", {
+    const response = await axios.get(`/admin/get-all-users?page=${page}`, {
       withCredentials: true,
     });
 
@@ -102,6 +102,19 @@ export const updateUser = async (id, data) => {
     } else {
       throw new Error(`Unexpected Error: ${response.statusText}`);
     }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// *************** DELETE USER ****************/
+export const deleteUser = async (id) => {
+  try {
+    const response = await axios.delete(`/admin/delete-user/${id}`, {
+      withCredentials: true,
+    });
+
+    return response.data;
   } catch (err) {
     throw err;
   }
