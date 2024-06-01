@@ -73,14 +73,14 @@ const Header = () => {
                   className="h-8 w-8 rounded-full"
                 />
               ) : (
-                <FaRegUserCircle size={26} title="Profile" />
+                user?._id && <FaRegUserCircle size={26} title="Profile" />
               )}
               {/********* SHOW POPUP OF ADMIN PANEL ****************/}
               {isProfileMenuOpen && (
                 <div className="absolute -right-10 top-10 w-32 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                  {user?._id ? (
+                  {user?.isAdmin ? (
                     <Link
-                      to="admin"
+                      to="/admin/all-products"
                       className="block px-4 py-2 text-gray-800 hidden md:block hover:bg-gray-100"
                     >
                       Admin Panel
@@ -88,9 +88,7 @@ const Header = () => {
                   ) : (
                     <p
                       onClick={() => {
-                        toast.error(
-                          "Please login first to access admin panel."
-                        );
+                        toast.error("Accessble by only admins!");
                       }}
                       className="block px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer"
                     >
