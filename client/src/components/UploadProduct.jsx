@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import productCategory from "../data/productCategory";
 import { FaFileUpload } from "react-icons/fa";
@@ -7,10 +7,10 @@ import DisplayImageFull from "./DisplayImageFull";
 import { MdDelete } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { showLoading, hideLoading } from "../redux/spinnerSlice";
-import { uploadProduct } from "../api/api";
+import { updateProductDetails, uploadProduct } from "../api/api";
 import { toast } from "react-toastify";
 
-const UploadProduct = ({ onClose }) => {
+const UploadProduct = ({ onClose, mode = "upload", product }) => {
   const dispatch = useDispatch();
   const [data, setData] = useState({
     productName: "",
@@ -23,6 +23,13 @@ const UploadProduct = ({ onClose }) => {
   });
   const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
   const [fullScreenImage, setFullScreenImage] = useState("");
+
+  //************** DATA SET FOR UPDATE **********/
+  useEffect(() => {
+    if (mode === "edit" && product) {
+      setData(product);
+    }
+  }, [mode, product]);
 
   //************** ONCHANGE || SET DATA *******/
   const handleChange = (e) => {
@@ -51,7 +58,7 @@ const UploadProduct = ({ onClose }) => {
         ],
       }));
     } catch (err) {
-      console.log(err);
+      toast.error("Failed to upload image");
       dispatch(hideLoading());
     }
   };
@@ -64,12 +71,15 @@ const UploadProduct = ({ onClose }) => {
     }));
   };
 
-  //*********** UPLOAD PRODUCT || FORM SUBMIT *************/
+  //******** FORM SUBMIT (UPLOAD PRODUCT & UPDATE PRODUCT) **********/
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
       dispatch(showLoading());
-      const res = await uploadProduct(data);
+      const res =
+        mode === "upload"
+          ? await uploadProduct(data)
+          : await updateProductDetails(product._id, data);
       dispatch(hideLoading());
       if (res.success) {
         toast.success(res.message);
@@ -88,7 +98,7 @@ const UploadProduct = ({ onClose }) => {
           {/************* HEADER OF UPLOAD PRODUCT *************/}
           <div className="flex justify-between items-center pb-4 border-b">
             <h2 className="text-xl font-semibold text-indigo-500">
-              Upload Product
+              {mode === "upload" ? "Upload Product" : "Edit Product"}
             </h2>
             <button
               onClick={onClose}
@@ -163,6 +173,7 @@ const UploadProduct = ({ onClose }) => {
                 ))}
               </select>
             </div>
+
             {/***************** PRODUCT IMAGE *****************/}
             <div className="mt-2">
               <label
@@ -203,6 +214,7 @@ const UploadProduct = ({ onClose }) => {
                           }}
                         />
                         <button
+                          type="button"
                           onClick={() => handleDeleteImage(index)}
                           className="absolute top-1 right-1 text-red-400 text-xl hover:text-red-600 hover:text-2xl transition-all"
                         >
@@ -278,7 +290,7 @@ const UploadProduct = ({ onClose }) => {
                 type="submit"
                 className="w-full py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition"
               >
-                Upload Product
+                {mode === "upload" ? "Upload Product" : "Update Product"}
               </button>
             </div>
           </form>

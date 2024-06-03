@@ -140,3 +140,35 @@ export const uploadProduct = async (data) => {
     throw err;
   }
 };
+
+// *************** GET ALL PRODUCTS ****************/
+export const getAllProducts = async () => {
+  try {
+    const response = await axios.get("/product/get-all-products");
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// *************** UPDATE PRODUCT DETAILS ****************/
+export const updateProductDetails = async (id, data) => {
+  try {
+    const response = await axios.put(`/product/update-product/${id}`, data, {
+      withCredentials: true,
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
