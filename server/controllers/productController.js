@@ -93,3 +93,29 @@ export const uploadProductController = async (req, res) => {
     });
   }
 };
+
+//**************** GET ALL PRODUCTS CONTROLLER ***********/
+export const getAllProductsController = async (req, res) => {
+  try {
+    const allProducts = await ProductModel.find().sort({ createdAt: -1 });
+
+    if (!allProducts.length) {
+      return res.status(404).json({
+        success: false,
+        message: "No products found",
+      });
+    }
+
+    // Success
+    return res.status(200).json({
+      success: true,
+      allProducts,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error!",
+      error: err.message,
+    });
+  }
+};
