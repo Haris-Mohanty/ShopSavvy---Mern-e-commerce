@@ -114,7 +114,28 @@ export const deleteUser = async (id) => {
       withCredentials: true,
     });
 
-    return response.data;
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// *************** UPLOAD PRODUCT ****************/
+export const uploadProduct = async (data) => {
+  try {
+    const response = await axios.post("/product/upload-product", data, {
+      withCredentials: true,
+    });
+
+    if (response.status === 201) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
   } catch (err) {
     throw err;
   }
