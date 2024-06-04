@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import DisplayImageFull from "./DisplayImageFull";
 import UploadProduct from "./UploadProduct";
+import displayInr from "../data/IndCur";
 
-const ShowProductCard = ({ product }) => {
+const ShowProductCard = ({ product, fetchAllProducts }) => {
   //************ DISPLAY INAGE IN FULL SCREEN ********************/
   const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
   const [fullScreenImage, setFullScreenImage] = useState("");
@@ -31,7 +32,7 @@ const ShowProductCard = ({ product }) => {
           </h1>
           <div className="flex justify-between items-center mt-2">
             <span className="text-lg text-indigo-600 font-bold">
-              ${product.price}
+              {displayInr(product.sellingPrice)}
             </span>
             <button
               onClick={() => setOpenEditProduct(true)}
