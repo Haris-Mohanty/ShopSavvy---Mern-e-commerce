@@ -19,7 +19,7 @@ const ShowProductCard = ({ product, fetchAllProducts }) => {
           <img
             src={product.productImage[0]}
             alt="Product"
-            className="w-full h-46 object-cover transition-transform duration-300 ease-in-out transform hover:scale-110 cursor-pointer"
+            className="w-full h-48 object-cover transition-transform duration-300 ease-in-out transform hover:scale-110 cursor-pointer"
             onClick={() => {
               setOpenFullScreenImage(true);
               setFullScreenImage(product.productImage[0]);
@@ -27,7 +27,7 @@ const ShowProductCard = ({ product, fetchAllProducts }) => {
           />
         </div>
         <div className="mt-1">
-          <h1 className="text-md font-semibold text-gray-700">
+          <h1 className="text-md font-semibold text-gray-700 text-ellipsis line-clamp-3">
             {product.productName}
           </h1>
           <div className="flex justify-between items-center mt-2">
@@ -49,6 +49,7 @@ const ShowProductCard = ({ product, fetchAllProducts }) => {
             onClose={() => setOpenEditProduct(false)}
             product={product}
             mode="edit"
+            fetchAllProducts={fetchAllProducts}
           />
         )}
       </div>

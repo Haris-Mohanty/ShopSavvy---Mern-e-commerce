@@ -10,7 +10,12 @@ import { showLoading, hideLoading } from "../redux/spinnerSlice";
 import { updateProductDetails, uploadProduct } from "../api/api";
 import { toast } from "react-toastify";
 
-const UploadProduct = ({ onClose, mode = "upload", product }) => {
+const UploadProduct = ({
+  onClose,
+  mode = "upload",
+  product,
+  fetchAllProducts,
+}) => {
   const dispatch = useDispatch();
   const [data, setData] = useState({
     productName: "",
@@ -84,6 +89,7 @@ const UploadProduct = ({ onClose, mode = "upload", product }) => {
       if (res.success) {
         toast.success(res.message);
         onClose();
+        fetchAllProducts();
       }
     } catch (err) {
       dispatch(hideLoading());
