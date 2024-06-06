@@ -37,7 +37,7 @@ const ProtectedRoutes = ({ children }) => {
   }, [user, dispatch]);
 
   if (redirect) {
-    return <Navigate to={"/login"} />;
+    return <Navigate to={"/"} />;
   }
 
   return user ? children : null;

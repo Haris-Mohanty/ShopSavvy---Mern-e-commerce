@@ -172,3 +172,18 @@ export const updateProductDetails = async (id, data) => {
     throw err;
   }
 };
+
+// *************** FETCH PRODUCT CATEGORY ****************/
+export const getProductCategory = async () => {
+  try {
+    const response = await axios.get("/product/get-product-category");
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
