@@ -228,3 +228,40 @@ export const updateProductController = async (req, res) => {
     });
   }
 };
+
+//**************** GET PRODUCT CATEGORY CONTROLLER ***********/
+export const getProductCategoryController = async (req, res) => {
+  try {
+    const productCategory = await ProductModel.distinct("category");
+
+    // Array to store product from each category
+    const productByCategory = [];
+
+    for (const category of productCategory) {
+      const product = await ProductModel.findOne({ category });
+
+      if (product) {
+        productByCategory.push(product);
+      }
+    }
+
+    if (productByCategory.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No products found for any category.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Products retrieved successfully.",
+      data: productByCategory,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error!",
+      error: err.message,
+    });
+  }
+};
