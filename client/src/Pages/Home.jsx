@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { hideLoading, showLoading } from "../redux/spinnerSlice";
 import { getUserDetails } from "../api/api";
 import { clearUser, setUser } from "../redux/userSlice";
+import Banner from "../components/Banner";
 
 const Home = () => {
   const { user } = useSelector((state) => state.user);
@@ -35,6 +36,7 @@ const Home = () => {
   return (
     <>
       <CategoryList />
+      <Banner />
     </>
   );
 };

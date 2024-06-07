@@ -19,7 +19,7 @@ const ShowProductCard = ({ product, fetchAllProducts }) => {
           <img
             src={product.productImage[0]}
             alt="Product"
-            className="w-full h-48 object-cover transition-transform duration-300 ease-in-out transform hover:scale-110 cursor-pointer"
+            className="w-full h-48 object-fill transition-transform duration-300 ease-in-out transform hover:scale-110 cursor-pointer"
             onClick={() => {
               setOpenFullScreenImage(true);
               setFullScreenImage(product.productImage[0]);

@@ -26,6 +26,7 @@ const CategoryList = () => {
 
   useEffect(() => {
     fetchCategoryProduct();
+    //eslint-disable-next-line
   }, []);
 
   return (
