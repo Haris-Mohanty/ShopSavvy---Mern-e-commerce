@@ -8,6 +8,7 @@ import PublicRoutes from "./PublicRoutes";
 import AdminPanel from "../Pages/AdminPanel";
 import AllUsers from "../Pages/AllUsers";
 import AllProducts from "../Pages/AllProducts";
+import ProductCategory from "../Pages/ProductCategory";
 
 // Create Routes
 const router = createBrowserRouter([
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
+      },
+      {
+        path: "product-category/:categoryName",
+        element: <ProductCategory />,
       },
       {
         path: "admin",

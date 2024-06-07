@@ -1,6 +1,8 @@
 .customShadow {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
+/* CUSTOMIZE SCROLL BAR  */
 .custom-scrollbar::-webkit-scrollbar {
   width: 12px;
 }
@@ -12,4 +14,9 @@
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: #888 #f1f1f1;
+}
+
+/* SCROLL BAR HIDE */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
