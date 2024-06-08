@@ -5,6 +5,7 @@ import {
   getAllProductsController,
   updateProductController,
   getProductCategoryController,
+  getCategoryWiseProductController,
 } from "../controllers/productController.js";
 
 //Router Obj
@@ -22,6 +23,9 @@ router.put("/update-product/:id", authMiddleware, updateProductController);
 
 // Get Product Category
 router.get("/get-product-category", getProductCategoryController);
+
+// Get category wise product
+router.get("/get-category-wise-product", getCategoryWiseProductController);
 
 //Export
 export default router;

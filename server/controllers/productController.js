@@ -265,3 +265,41 @@ export const getProductCategoryController = async (req, res) => {
     });
   }
 };
+
+//**************** GET CATEGORY WISE PRODUCT CONTROLLER ***********/
+export const getCategoryWiseProductController = async (req, res) => {
+  try {
+    const { category } = req.body || req.query;
+    // Validate the category parameter
+    if (!category) {
+      return res.status(400).json({
+        success: false,
+        message: "Category is required",
+      });
+    }
+
+    // Fetch products
+    const products = await ProductModel.find({ category });
+
+    // Validation
+    if (!products.length) {
+      return res.status(404).json({
+        success: false,
+        message: "No products found for the given category",
+      });
+    }
+
+    // Success res
+    return res.status(200).json({
+      success: true,
+      totalProducts: products.length,
+      data: products,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error!",
+      error: err.message,
+    });
+  }
+};
