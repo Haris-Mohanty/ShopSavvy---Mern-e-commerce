@@ -191,7 +191,9 @@ export const getProductCategory = async () => {
 // *************** FETCH CATEGORY WISE PRODUCT  ****************/
 export const getCategoryWiseProducts = async (category) => {
   try {
-    const response = await axios.get("/get-category-wise-product", category);
+    const response = await axios.get("/product/get-category-wise-product", {
+      params: { category },
+    });
 
     if (response.status === 200) {
       return response.data;
