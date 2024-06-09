@@ -100,7 +100,7 @@ const Register = () => {
   return (
     <>
       <section id="register">
-        <div className="container mx-auto py-4 px-2">
+        <div className="container mx-auto py-4 px-2 mt-16">
           <div className="bg-white p-3 w-full max-w-sm mx-auto rounded-lg shadow-2xl">
             <div className="text-center mt-2 mb-2">
               <img src={savvy} alt="savvy" className="mx-auto" />

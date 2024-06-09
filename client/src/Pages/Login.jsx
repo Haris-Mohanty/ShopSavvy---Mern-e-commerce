@@ -41,7 +41,7 @@ const Login = () => {
   return (
     <>
       <section id="login">
-        <div className="container mx-auto py-4 px-2">
+        <div className="container mx-auto py-4 px-2 mt-16">
           <div className="bg-white p-3 w-full max-w-sm mx-auto rounded-lg shadow-2xl">
             <div className="mb-6 text-center mt-5">
               <img src={savvy} alt="login" className="mx-auto" />

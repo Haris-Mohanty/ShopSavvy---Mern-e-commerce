@@ -269,7 +269,7 @@ export const getProductCategoryController = async (req, res) => {
 //**************** GET CATEGORY WISE PRODUCT CONTROLLER ***********/
 export const getCategoryWiseProductController = async (req, res) => {
   try {
-    const { category } = req.body || req.query;
+    const { category } = req.query || req.body;
     // Validate the category parameter
     if (!category) {
       return res.status(400).json({

@@ -7,7 +7,7 @@ const AdminPanel = () => {
   const { user } = useSelector((state) => state.user);
   return (
     <>
-      <div className="min-h-[calc(100vh-71px)] md:flex hidden">
+      <div className="min-h-[calc(100vh-71px)] md:flex hidden mt-16">
         {/****************** SIDEBAR SECTION ****************/}
         <aside className="bg-white w-full min-h-full max-w-60 customShadow">
           <div className="h-36 flex justify-center items-center flex-col">
