@@ -4,7 +4,7 @@
 
 /* CUSTOMIZE SCROLL BAR  */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 12px;
+  width: 12zpx;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {

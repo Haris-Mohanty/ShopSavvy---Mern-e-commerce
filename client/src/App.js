@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Spinner from "./components/Spinner";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function App() {
   return (
