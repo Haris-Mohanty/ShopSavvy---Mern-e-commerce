@@ -303,3 +303,30 @@ export const getCategoryWiseProductController = async (req, res) => {
     });
   }
 };
+
+//**************** GET PRODUCT DETAILS CONTROLLER ***********/
+export const getProductDetailsController = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const product = await ProductModel.findById(id);
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found!",
+      });
+    }
+
+    // Success
+    return res.status(200).json({
+      success: true,
+      data: product,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error!",
+      error: err.message,
+    });
+  }
+};

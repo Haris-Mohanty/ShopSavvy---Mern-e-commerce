@@ -6,6 +6,7 @@ import {
   updateProductController,
   getProductCategoryController,
   getCategoryWiseProductController,
+  getProductDetailsController,
 } from "../controllers/productController.js";
 
 //Router Obj
@@ -26,6 +27,9 @@ router.get("/get-product-category", getProductCategoryController);
 
 // Get category wise product
 router.get("/get-category-wise-product", getCategoryWiseProductController);
+
+// Get product details by id
+router.get("/get-product-details/:id", getProductDetailsController);
 
 //Export
 export default router;
