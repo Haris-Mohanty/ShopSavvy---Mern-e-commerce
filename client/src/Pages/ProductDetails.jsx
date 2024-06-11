@@ -60,7 +60,7 @@ const ProductDetails = () => {
             </div>
 
             <div className="h-full">
-              <div className="flex gap-2 md:flex-col overflow-scroll h-full scrollbar-none shadow-lg">
+              <div className="flex gap-2 md:flex-col overflow-scroll h-full scrollbar-none">
                 {product
                   ? product.productImage.map((image, index) => (
                       <div
@@ -89,29 +89,39 @@ const ProductDetails = () => {
           {/************* PRODUCT DETAIL *******/}
           <div className="flex-1 p-4 md:p-1">
             <p className="bg-indigo-500 text-white px-3 py-1 inline-block rounded-full uppercase tracking-wide">
-              {product?.brandName}
+              {product ? product.brandName : <Skeleton width={100} />}
             </p>
             <h2 className="text-lg md:text-3xl font-bold md:font-semibold text-gray-800">
-              {product?.productName}
+              {product ? (
+                product.productName
+              ) : (
+                <Skeleton width={1000} count={2} />
+              )}
             </h2>
             <p className="capitalize text-slate-400 mt-1">
-              {product?.category}
+              {product ? product.category : <Skeleton width={100} />}
             </p>
             <p className="mt-1 text-indigo-500 font-bold">Special Price</p>
             <div className="mb-2 flex items-baseline">
-              <span className="text-2xl font-bold text-slate-900">
-                {displayInr(product?.sellingPrice)}
-              </span>
-              <span className="text-sm text-slate-900 line-through ml-2">
-                {displayInr(product?.price)}
-              </span>
-              <span className="ml-2 text-sm font-bold text-indigo-700">
-                {Math.round(
-                  ((product?.price - product?.sellingPrice) / product?.price) *
-                    100
-                )}
-                % OFF
-              </span>
+              {product ? (
+                <>
+                  <span className="text-2xl font-bold text-slate-900">
+                    {displayInr(product.sellingPrice)}
+                  </span>
+                  <span className="text-sm text-slate-900 line-through ml-2">
+                    {displayInr(product.price)}
+                  </span>
+                  <span className="ml-2 text-sm font-bold text-indigo-700">
+                    {Math.round(
+                      ((product.price - product.sellingPrice) / product.price) *
+                        100
+                    )}
+                    % OFF
+                  </span>
+                </>
+              ) : (
+                <Skeleton width={200} />
+              )}
             </div>
             <div className="flex gap-4 mt-2">
               <button className="flex items-center gap-2 bg-indigo-500 text-white rounded-lg px-4 py-2 hover:bg-indigo-600 transition duration-300">
@@ -128,7 +138,7 @@ const ProductDetails = () => {
                 Description:
               </p>
               <span className="text-gray-600 text-sm md:text-base">
-                {product?.description}
+                {product ? product.description : <Skeleton count={6} />}
               </span>
             </div>
           </div>
