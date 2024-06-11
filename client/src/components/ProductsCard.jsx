@@ -77,7 +77,7 @@ const ProductsCard = ({ category, heading }) => {
                 >
                   <Link
                     className="relative mx-3 flex flex-col h-40 overflow-hidden rounded-xl"
-                    to={"/"}
+                    to={`product-details/${product._id}`}
                   >
                     <div className="overflow-y-scroll h-40 custom-scrollbar">
                       {product.productImage.map((img, index) => (
@@ -99,8 +99,8 @@ const ProductsCard = ({ category, heading }) => {
                     </span>
                   </Link>
                   <div className="px-3 pb-2">
-                    <Link to={"/"}>
-                      <h5 className="text-sm tracking-tight font-semibold text-slate-700 text-ellipsis line-clamp-2">
+                    <Link to={`product-details/${product._id}`}>
+                      <h5 className="text-sm tracking-tight font-semibold text-slate-700 text-ellipsis line-clamp-2 hover:text-indigo-600">
                         {product.productName}
                       </h5>
                     </Link>
@@ -114,13 +114,13 @@ const ProductsCard = ({ category, heading }) => {
                         </span>
                       </p>
                     </div>
-                    <Link
-                      to="#"
-                      className="flex items-center justify-center rounded-md bg-indigo-600 px-4 py-2 text-center text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
+                    <button
+                      type="button"
+                      className="w-full flex items-center justify-center rounded-md bg-indigo-600 px-4 py-2 text-center text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none"
                     >
                       <MdOutlineShoppingCart size={20} />
-                      Add to cart
-                    </Link>
+                      <span className="ml-2">Add to cart</span>
+                    </button>
                   </div>
                 </div>
               ))}

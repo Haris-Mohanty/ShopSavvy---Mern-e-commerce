@@ -204,3 +204,18 @@ export const getCategoryWiseProducts = async (category) => {
     throw err;
   }
 };
+
+// *************** GET PRODUCT DETAILS  ****************/
+export const getProductDetails = async (id) => {
+  try {
+    const response = await axios.get(`/product/get-product-details/${id}`);
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};

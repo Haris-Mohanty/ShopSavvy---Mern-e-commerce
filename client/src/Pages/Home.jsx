@@ -39,18 +39,18 @@ const Home = () => {
     <>
       <CategoryList />
       <Banner />
-      <ProductsCard category={"mobiles"} heading={"Top Mobiles"} />
-      <ProductsCard category={"trimmers"} heading={"Popular Trimmers"} />
-      <ProductsCardWith category={"Mouse"} heading={"Mouse"} />
-      <ProductsCardWith category={"airpodes"} heading={"Airpods"} />
-      <ProductsCardWith category={"camera"} heading={"Camera"} />
-      <ProductsCardWith category={"earphones"} heading={"Wired Earphones"} />
-      <ProductsCardWith category={"watches"} heading={"Smart Watches"} />
-      <ProductsCardWith category={"televisions"} heading={"Televisions"} />
-      <ProductsCardWith category={"printers"} heading={"Printers"} />
-      <ProductsCardWith category={"processor"} heading={"Processor"} />
-      <ProductsCardWith category={"refrigerator"} heading={"Refrigerator"} />
-      <ProductsCardWith category={"speakers"} heading={"Bluetooth Speakers"} />
+      <ProductsCard category={"mobiles"} heading={"Latest Mobiles"} />
+      <ProductsCard category={"trimmers"} heading={"Grooming Essentials"} />
+      <ProductsCardWith category={"Mouse"} heading={"Tech Accessories"} />
+      <ProductsCardWith category={"airpodes"} heading={"Wireless Wonders"} />
+      <ProductsCardWith category={"camera"} heading={"Photography Picks"} />
+      <ProductsCardWith category={"earphones"} heading={"Audio Adventures"} />
+      <ProductsCardWith category={"watches"} heading={"Timeless Tech"} />
+      <ProductsCardWith category={"televisions"} heading={"Entertainment Extravaganza"} />
+      <ProductsCardWith category={"printers"} heading={"Printing Perfection"} />
+      <ProductsCardWith category={"processor"} heading={"Powerful Processors"} />
+      <ProductsCardWith category={"refrigerator"} heading={"Cool Kitchen Gadgets"} />
+      <ProductsCardWith category={"speakers"} heading={"Sound Sensations"} />
     </>
   );
 };
