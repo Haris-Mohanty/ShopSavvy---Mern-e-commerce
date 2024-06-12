@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../redux/spinnerSlice";
 import { toast } from "react-toastify";
@@ -7,10 +7,11 @@ import { useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import displayInr from "../data/IndCur";
 import { MdOutlineShoppingCart, MdOutlineLocalMall } from "react-icons/md";
+import RecommendedProducts from "../components/RecommendedProducts";
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
-  const params = useParams();
+  const { id } = useParams();
 
   const [product, setProduct] = useState(null);
   const [activeImage, setActiveImage] = useState("");
@@ -25,7 +26,7 @@ const ProductDetails = () => {
   const fetchProductDetails = async () => {
     try {
       dispatch(showLoading());
-      const res = await getProductDetails(params?.id);
+      const res = await getProductDetails(id);
       dispatch(hideLoading());
       if (res.success) {
         setProduct(res.data);
@@ -45,7 +46,7 @@ const ProductDetails = () => {
   useEffect(() => {
     fetchProductDetails();
     //eslint-disable-next-line
-  }, []);
+  }, [id]);
 
   //************  HANDLE SHOW DESCRIPTION ********/
   const handleShowMore = () => {
@@ -67,13 +68,13 @@ const ProductDetails = () => {
         <div className="min-h-[200px] flex flex-col md:flex-row gap-4">
           {/************* PRODUCT IMAGE *******/}
           <div className="h-96 flex flex-col md:flex-row-reverse gap-4">
-            <div className="h-[300px] w-[343px] md:h-96 md:w-92 bg-slate-200 rounded-lg shadow-lg relative">
+            <div className="h-[300px] w-[343px] md:h-96 md:w-92 bg-slate-200 rounded-lg shadow-lg relative p-2">
               {activeImage ? (
                 <>
                   <img
                     src={activeImage}
                     alt="Product Images"
-                    className="w-full h-full object-scale-down mix-blend-multiply p-2"
+                    className="w-full h-full object-scale-down mix-blend-multiply cursor-move"
                     onMouseMove={handleZoomImage}
                     onMouseLeave={() => setZoomImage(false)}
                   />
@@ -206,6 +207,14 @@ const ProductDetails = () => {
             </div>
           </div>
         </div>
+
+        {/**************** RECOMMENDED PRODUCTS */}
+        {product && (
+          <RecommendedProducts
+            category={product?.category}
+            heading={"Recommended Products"}
+          />
+        )}
       </div>
     </>
   );
