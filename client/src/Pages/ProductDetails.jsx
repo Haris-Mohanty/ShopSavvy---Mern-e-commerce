@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../redux/spinnerSlice";
 import { toast } from "react-toastify";
@@ -14,6 +14,12 @@ const ProductDetails = () => {
 
   const [product, setProduct] = useState(null);
   const [activeImage, setActiveImage] = useState("");
+  const [showFullDescription, setShowFullDescription] = useState(false);
+  const [zoomImageCoordinate, setZoomImageCoordinate] = useState({
+    x: 0,
+    y: 0,
+  });
+  const [zoomImage, setZoomImage] = useState(false);
 
   //************** FETCH PRODUCT DETAILS ***********/
   const fetchProductDetails = async () => {
@@ -41,19 +47,52 @@ const ProductDetails = () => {
     //eslint-disable-next-line
   }, []);
 
+  //************  HANDLE SHOW DESCRIPTION ********/
+  const handleShowMore = () => {
+    setShowFullDescription(!showFullDescription);
+  };
+
+  //************  HANDLE ZOOM PRODUCT IMAGE ********/
+  const handleZoomImage = (e) => {
+    setZoomImage(true);
+    const { left, top, width, height } = e.target.getBoundingClientRect();
+    const x = (e.clientX - left) / width;
+    const y = (e.clientY - top) / height;
+    setZoomImageCoordinate({ x, y });
+  };
+
   return (
     <>
-      <div className="container mx-auto mt-20 px-4 md:px-8">
+      <div className="container mx-auto mt-20 px-4 md:px-8 mb-8">
         <div className="min-h-[200px] flex flex-col md:flex-row gap-4">
           {/************* PRODUCT IMAGE *******/}
           <div className="h-96 flex flex-col md:flex-row-reverse gap-4">
-            <div className="h-[300px] w-[343px] md:h-96 md:w-92 bg-slate-200 rounded-lg shadow-lg">
+            <div className="h-[300px] w-[343px] md:h-96 md:w-92 bg-slate-200 rounded-lg shadow-lg relative">
               {activeImage ? (
-                <img
-                  src={activeImage}
-                  alt="Product Images"
-                  className="w-full h-full object-scale-down mix-blend-multiply p-2"
-                />
+                <>
+                  <img
+                    src={activeImage}
+                    alt="Product Images"
+                    className="w-full h-full object-scale-down mix-blend-multiply p-2"
+                    onMouseMove={handleZoomImage}
+                    onMouseLeave={() => setZoomImage(false)}
+                  />
+                  {/* Product Zoom */}
+                  {zoomImage && (
+                    <div className="hidden md:block absolute min-w-[500px] min-h-[400px] rounded-lg bg-slate-200 overflow-hidden -right-[515px] top-0 shadow-lg">
+                      <div
+                        className="w-full h-full min-h-[400px] min-w-[500px] mix-blend-multiply scale-125"
+                        style={{
+                          backgroundImage: `url(${activeImage})`,
+                          backgroundRepeat: "no-repeat",
+                          backgroundPosition: `${
+                            zoomImageCoordinate.x * 100
+                          }% ${zoomImageCoordinate.y * 100}%`,
+                        }}
+                      ></div>
+                    </div>
+                  )}
+                </>
               ) : (
                 <Skeleton width="100%" height="100%" />
               )}
@@ -138,8 +177,32 @@ const ProductDetails = () => {
                 Description:
               </p>
               <span className="text-gray-600 text-sm md:text-base">
-                {product ? product.description : <Skeleton count={6} />}
+                {product ? (
+                  showFullDescription ? (
+                    product?.description
+                  ) : (
+                    <>
+                      {product.description.slice(0, 500)}...
+                      <button
+                        onClick={handleShowMore}
+                        className="text-indigo-500 font-semibold ml-2"
+                      >
+                        Show More
+                      </button>
+                    </>
+                  )
+                ) : (
+                  <Skeleton count={5} />
+                )}
               </span>
+              {showFullDescription && (
+                <button
+                  onClick={handleShowMore}
+                  className="text-indigo-500 font-semibold ml-2"
+                >
+                  Show Less
+                </button>
+              )}
             </div>
           </div>
         </div>
