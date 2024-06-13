@@ -219,3 +219,20 @@ export const getProductDetails = async (id) => {
     throw err;
   }
 };
+
+// *************** PRODUCT ADD TO CART  ****************/
+export const addToCart = async (productId) => {
+  try {
+    const response = await axios.post("/cart/add-to-cart", productId, {
+      withCredentials: true,
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};

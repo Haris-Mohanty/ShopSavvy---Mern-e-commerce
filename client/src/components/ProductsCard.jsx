@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../redux/spinnerSlice";
+import { showLoading, hideLoading } from "../redux/spinnerSlice";
 import { getCategoryWiseProducts } from "../api/api";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import displayInr from "../data/IndCur";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import Skeleton from "react-loading-skeleton";
+import itemsAddToCart from "../data/itemsAddToCart";
 
 const ProductsCard = ({ category, heading }) => {
   const dispatch = useDispatch();
@@ -116,6 +117,7 @@ const ProductsCard = ({ category, heading }) => {
                     </div>
                     <button
                       type="button"
+                      onClick={() => itemsAddToCart(product?._id, dispatch)}
                       className="w-full flex items-center justify-center rounded-md bg-indigo-600 px-4 py-2 text-center text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none"
                     >
                       <MdOutlineShoppingCart size={20} />

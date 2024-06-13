@@ -8,6 +8,7 @@ import Skeleton from "react-loading-skeleton";
 import displayInr from "../data/IndCur";
 import { MdOutlineShoppingCart, MdOutlineLocalMall } from "react-icons/md";
 import RecommendedProducts from "../components/RecommendedProducts";
+import itemsAddToCart from "../data/itemsAddToCart";
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
@@ -168,7 +169,11 @@ const ProductDetails = () => {
                 <MdOutlineLocalMall size={22} />
                 Buy Now
               </button>
-              <button className="flex items-center gap-2 bg-indigo-500 text-white rounded-lg px-4 py-2 hover:bg-indigo-600 transition duration-300">
+              <button
+                type="button"
+                onClick={() => itemsAddToCart(product?._id, dispatch)}
+                className="flex items-center gap-2 bg-indigo-500 text-white rounded-lg px-4 py-2 hover:bg-indigo-600 transition duration-300"
+              >
                 <MdOutlineShoppingCart size={22} />
                 Add to Cart
               </button>

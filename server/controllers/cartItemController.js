@@ -5,7 +5,7 @@ import UserModel from "../Models/UserModel.js";
 //**************** ADD TO CART CONTROLLER *************/
 export const addToCartController = async (req, res) => {
   try {
-    const { productId, quantity } = req.body;
+    const { productId } = req.body;
     const userId = req.user;
 
     // Validation
@@ -13,14 +13,6 @@ export const addToCartController = async (req, res) => {
       return res.status(422).json({
         success: false,
         message: "Please add product",
-      });
-    }
-
-    // Validate the quantity
-    if (!Number.isInteger(quantity) || quantity <= 0) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid quantity",
       });
     }
 
@@ -52,7 +44,7 @@ export const addToCartController = async (req, res) => {
     }
 
     // Create new cart item
-    const newCartItem = new CartItemModel({ userId, productId, quantity });
+    const newCartItem = new CartItemModel({ userId, productId, quantity: 1 });
     await newCartItem.save();
 
     // Response

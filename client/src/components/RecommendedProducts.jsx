@@ -8,6 +8,7 @@ import displayInr from "../data/IndCur";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import Skeleton from "react-loading-skeleton";
 import scrollTop from "../data/scrollTop";
+import itemsAddToCart from "../data/itemsAddToCart";
 
 const RecommendedProducts = ({ category, heading }) => {
   const dispatch = useDispatch();
@@ -122,6 +123,7 @@ const RecommendedProducts = ({ category, heading }) => {
                     </div>
                     <button
                       type="button"
+                      onClick={() => itemsAddToCart(product?._id, dispatch)}
                       className="w-full flex items-center justify-center rounded-md bg-indigo-600 px-4 py-2 text-center text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none"
                     >
                       <MdOutlineShoppingCart size={20} />
