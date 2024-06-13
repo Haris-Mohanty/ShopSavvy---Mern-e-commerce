@@ -61,3 +61,25 @@ export const addToCartController = async (req, res) => {
     });
   }
 };
+
+//**************** COUNT CART ITEMS CONTROLLER *************/
+export const countCartItemsController = async (req, res) => {
+  try {
+    const userId = req.user;
+
+    const cartItemCount = await CartItemModel.countDocuments({
+      userId: userId,
+    });
+
+    return res.status(200).json({
+      success: true,
+      count: cartItemCount,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error!",
+      error: err.message,
+    });
+  }
+};
