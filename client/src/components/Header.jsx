@@ -31,6 +31,8 @@ const Header = () => {
     }
   };
 
+  //************* SHOW NUMBER OF CART ITEMS *******************/
+
   return (
     <>
       <header className="bg-white h-16 shadow-md fixed top-0 right-0 left-0 z-50">

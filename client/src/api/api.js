@@ -236,3 +236,20 @@ export const addToCart = async (productId) => {
     throw err;
   }
 };
+
+// *************** COUNT CART ITEMS  ****************/
+export const countCartItems = async () => {
+  try {
+    const response = await axios.get("/cart/count-cart-items", {
+      withCredentials: true,
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
