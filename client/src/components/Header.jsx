@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 
 const Header = () => {
   const { user } = useSelector((state) => state.user);
+  const { count } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
@@ -61,7 +62,7 @@ const Header = () => {
                 <HiOutlineShoppingCart size={26} title="Cart" />
               </span>
               <div className="bg-indigo-600 text-white w-5 h-5 rounded-full flex items-center justify-center absolute -top-2 -right-2">
-                <p className="text-xs">0</p>
+                <p className="text-xs">{count}</p>
               </div>
             </div>
             <div

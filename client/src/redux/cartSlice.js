@@ -10,8 +10,13 @@ export const cartSlice = createSlice({
     setCartItemCount: (state, action) => {
       state.count = action.payload;
     },
-    deleteCartItemCount: (state, action) => {
-      state.count = action.payload;
+    incrementCartItemCount: (state) => {
+      state.count += 1;
+    },
+    decrementCartItemCount: (state) => {
+      if (state.count > 0) {
+        state.count -= 1;
+      }
     },
     clearCartItemCount: (state) => {
       state.count = 0;
@@ -19,5 +24,9 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { setCartItemCount, deleteCartItemCount, clearCartItemCount } =
-  cartSlice.actions;
+export const {
+  setCartItemCount,
+  incrementCartItemCount,
+  decrementCartItemCount,
+  clearCartItemCount,
+} = cartSlice.actions;

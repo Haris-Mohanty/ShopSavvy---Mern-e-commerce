@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import { addToCart } from "../api/api";
 import { hideLoading, showLoading } from "../redux/spinnerSlice";
+import { incrementCartItemCount } from "../redux/cartSlice";
 
 const itemsAddToCart = async (id, dispatch) => {
   try {
@@ -10,6 +11,7 @@ const itemsAddToCart = async (id, dispatch) => {
 
     if (res.success) {
       toast.success(res.message);
+      dispatch(incrementCartItemCount());
     }
   } catch (err) {
     dispatch(hideLoading());
