@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import logo from "../Assets/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { TbShoppingCartSearch } from "react-icons/tb";
 import { FaRegUserCircle } from "react-icons/fa";
 import { HiOutlineShoppingCart } from "react-icons/hi";
@@ -14,6 +14,7 @@ const Header = () => {
   const { user } = useSelector((state) => state.user);
   const { count } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   // ********** USER LOGOUT *******/
@@ -32,7 +33,15 @@ const Header = () => {
     }
   };
 
-  //************* SHOW NUMBER OF CART ITEMS *******************/
+  //*********** CART CLICK HANDLE *****************/
+  const handleCartClick = () => {
+    if (user) {
+      navigate("/cart");
+    } else {
+      toast.error("Please login to access the cart.");
+      navigate("/login");
+    }
+  };
 
   return (
     <>
@@ -57,7 +66,10 @@ const Header = () => {
 
           {/************  CART AND USER PROFILE *************/}
           <div className="flex items-center space-x-4">
-            <div className="text-indigo-500 cursor-pointer relative">
+            <div
+              className="text-indigo-500 cursor-pointer relative"
+              onClick={handleCartClick}
+            >
               <span>
                 <HiOutlineShoppingCart size={26} title="Cart" />
               </span>

@@ -10,6 +10,7 @@ import AllUsers from "../Pages/AllUsers";
 import AllProducts from "../Pages/AllProducts";
 import ProductCategory from "../Pages/ProductCategory";
 import ProductDetails from "../Pages/ProductDetails";
+import Cart from "../Pages/Cart";
 
 // Create Routes
 const router = createBrowserRouter([
@@ -28,6 +29,14 @@ const router = createBrowserRouter([
       {
         path: "product-details/:id",
         element: <ProductDetails />,
+      },
+      {
+        path: "cart",
+        element: (
+          <ProtectedRoutes>
+            <Cart />
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "admin",
