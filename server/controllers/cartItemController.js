@@ -83,3 +83,37 @@ export const countCartItemsController = async (req, res) => {
     });
   }
 };
+
+//**************** GET CART ITEMS CONTROLLER *************/
+export const getCartItemsController = async (req, res) => {
+  try {
+    const userId = req.user;
+
+    // User validation
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found!",
+      });
+    }
+
+    // Fetch cart items
+    const cartItems = await CartItemModel.find({ userId: userId }).populate(
+      "productId"
+    );
+
+    // Response
+    res.status(200).json({
+      success: true,
+      count: cartItems.length,
+      items: cartItems,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error!",
+      error: err.message,
+    });
+  }
+};
