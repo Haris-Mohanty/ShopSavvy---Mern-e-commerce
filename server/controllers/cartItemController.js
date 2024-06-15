@@ -117,3 +117,60 @@ export const getCartItemsController = async (req, res) => {
     });
   }
 };
+
+//****** UPDATE CART ITEMS CONTROLLER (INCREASE, DECREASE) *******/
+export const updateCartItemsController = async (req, res) => {
+  try {
+    const userId = req.user;
+    const { productId, action } = req.body;
+
+    //Validation
+    if (!productId || !action) {
+      return res.status(400).json({
+        success: false,
+        message: "Please add productId and action!",
+      });
+    }
+
+    // Find the cart item of user
+    const cartItem = await CartItemModel.findOne({ userId, productId });
+    if (!cartItem) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found in cart.",
+      });
+    }
+
+    // Handle Increase or Decrease items
+    if (action === 'increase') {
+      cartItem.quantity += 1
+    } else if (action === 'decrease') {
+      if (cartItem.quantity - 1 <= 0) {
+        return res.status(400).json({
+          success: false,
+          message: "Item quantity cannot be less than 1",
+        });
+      }
+      cartItem.quantity -= 1
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid action. Use 'increase' or 'decrease'.",
+      });
+    }
+
+    // Save the updated cart
+    await cartItem.save()
+
+    //Success res
+    return res.status(200).json({
+      cartItem
+    })
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error!",
+      error: err.message,
+    });
+  }
+};

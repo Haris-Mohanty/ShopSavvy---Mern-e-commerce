@@ -4,6 +4,7 @@ import {
   addToCartController,
   countCartItemsController,
   getCartItemsController,
+  updateCartItemsController,
 } from "../controllers/cartItemController.js";
 
 // Rourer obj
@@ -19,6 +20,9 @@ router.get("/count-cart-items", authMiddleware, countCartItemsController);
 
 // Get Cart Items
 router.get("/get-cart-items", authMiddleware, getCartItemsController);
+
+// Update cart item (Increase, Decrease)
+router.put("/update-cart-items", authMiddleware, updateCartItemsController);
 
 // Export
 export default router;
