@@ -270,3 +270,42 @@ export const getCartItems = async () => {
     throw err;
   }
 };
+
+// ************ UPDATE CART ITEMS (INCREASE, DECREASE)  **********/
+export const updateCartItems = async (productId, action) => {
+  try {
+    const response = await axios.put(
+      "/cart/update-cart-items",
+      { productId, action },
+      { withCredentials: true }
+    );
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+// ************ REMOVE ITEM FROM CART **********/
+export const removeFromCart = async (cartItemId) => {
+  try {
+    const response = await axios.post(
+      "/cart/remove-from-cart",
+      { cartItemId },
+      {
+        withCredentials: true,
+      }
+    );
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};

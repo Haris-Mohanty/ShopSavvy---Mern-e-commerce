@@ -26,7 +26,7 @@ router.get("/get-cart-items", authMiddleware, getCartItemsController);
 router.put("/update-cart-items", authMiddleware, updateCartItemsController);
 
 // Remove From Cart
-router.delete("/remove-from-cart", authMiddleware, removeFromCartController);
+router.post("/remove-from-cart", authMiddleware, removeFromCartController);
 
 // Export
 export default router;
