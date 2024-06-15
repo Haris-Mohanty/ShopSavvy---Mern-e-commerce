@@ -142,16 +142,16 @@ export const updateCartItemsController = async (req, res) => {
     }
 
     // Handle Increase or Decrease items
-    if (action === 'increase') {
-      cartItem.quantity += 1
-    } else if (action === 'decrease') {
+    if (action === "increase") {
+      cartItem.quantity += 1;
+    } else if (action === "decrease") {
       if (cartItem.quantity - 1 <= 0) {
         return res.status(400).json({
           success: false,
           message: "Item quantity cannot be less than 1",
         });
       }
-      cartItem.quantity -= 1
+      cartItem.quantity -= 1;
     } else {
       return res.status(400).json({
         success: false,
@@ -160,12 +160,61 @@ export const updateCartItemsController = async (req, res) => {
     }
 
     // Save the updated cart
-    await cartItem.save()
+    await cartItem.save();
 
     //Success res
     return res.status(200).json({
-      cartItem
-    })
+      success: true,
+      cartItem,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error!",
+      error: err.message,
+    });
+  }
+};
+
+//************ REMOVE FROM CART CONTROLLER ***********/
+export const removeFromCartController = async (req, res) => {
+  try {
+    const userId = req.user;
+    const { cartItemId } = req.body;
+    // Validate cartItemId
+    if (!cartItemId) {
+      return res.status(400).json({
+        success: false,
+        message: "cartItemId is required",
+      });
+    }
+
+    // Check the cart item exist of the user
+    const cartItem = await CartItemModel.findOne({
+      _id: cartItemId,
+      userId: userId,
+    });
+    if (!cartItem) {
+      return res.status(404).json({
+        success: false,
+        message: "Cart item not found!",
+      });
+    }
+
+    // Delete the cart item
+    const deleteProduct = await CartItemModel.deleteOne({ _id: cartItemId });
+    if (deleteProduct.deletedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Failed to remove cart item!",
+      });
+    }
+
+    // Success res
+    return res.status(200).json({
+      success: true,
+      message: "Item removed successfully!",
+    });
   } catch (err) {
     return res.status(500).json({
       success: false,

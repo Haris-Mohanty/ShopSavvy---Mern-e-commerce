@@ -5,6 +5,7 @@ import {
   countCartItemsController,
   getCartItemsController,
   updateCartItemsController,
+  removeFromCartController,
 } from "../controllers/cartItemController.js";
 
 // Rourer obj
@@ -23,6 +24,9 @@ router.get("/get-cart-items", authMiddleware, getCartItemsController);
 
 // Update cart item (Increase, Decrease)
 router.put("/update-cart-items", authMiddleware, updateCartItemsController);
+
+// Remove From Cart
+router.delete("/remove-from-cart", authMiddleware, removeFromCartController);
 
 // Export
 export default router;
