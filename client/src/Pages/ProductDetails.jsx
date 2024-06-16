@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../redux/spinnerSlice";
 import { toast } from "react-toastify";
 import { getProductDetails } from "../api/api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import displayInr from "../data/IndCur";
 import { MdOutlineShoppingCart, MdOutlineLocalMall } from "react-icons/md";
@@ -12,6 +12,7 @@ import itemsAddToCart from "../data/itemsAddToCart";
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const [product, setProduct] = useState(null);
@@ -61,6 +62,12 @@ const ProductDetails = () => {
     const x = (e.clientX - left) / width;
     const y = (e.clientY - top) / height;
     setZoomImageCoordinate({ x, y });
+  };
+
+  //************  HANDLE BUY PRODUCT ********/
+  const handleBuyNow = async (id, dispatch) => {
+    await itemsAddToCart(id, dispatch);
+    navigate("/cart");
   };
 
   return (
@@ -165,7 +172,11 @@ const ProductDetails = () => {
               )}
             </div>
             <div className="flex gap-4 mt-2">
-              <button className="flex items-center gap-2 bg-indigo-500 text-white rounded-lg px-4 py-2 hover:bg-indigo-600 transition duration-300">
+              <button
+                type="button"
+                onClick={() => handleBuyNow(product?._id, dispatch)}
+                className="flex items-center gap-2 bg-indigo-500 text-white rounded-lg px-4 py-2 hover:bg-indigo-600 transition duration-300"
+              >
                 <MdOutlineLocalMall size={22} />
                 Buy Now
               </button>
