@@ -330,3 +330,45 @@ export const getProductDetailsController = async (req, res) => {
     });
   }
 };
+
+//******** SEARCH PRODUCT (NAME AND CATEGORY) CONTROLLER ******/
+export const searchProductController = async (req, res) => {
+  try {
+    const queryParam = req.query.q;
+
+    // Create a case-insensitive regular expression from the query
+    const regex = new RegExp(
+      queryParam.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+      "i"
+    );
+
+    // Perform a search on the product model
+    const products = await ProductModel.find({
+      $or: [
+        { productName: regex }, // Match products by name
+        { category: regex }, // Match products by category
+      ],
+    });
+
+    // When search query is empty
+    if (products.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No products found!",
+        data: [],
+      });
+    }
+
+    // Success Res
+    return res.status(200).json({
+      success: true,
+      data: products,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error!",
+      error: err.message,
+    });
+  }
+};

@@ -7,6 +7,7 @@ import {
   getProductCategoryController,
   getCategoryWiseProductController,
   getProductDetailsController,
+  searchProductController,
 } from "../controllers/productController.js";
 
 //Router Obj
@@ -30,6 +31,9 @@ router.get("/get-category-wise-product", getCategoryWiseProductController);
 
 // Get product details by id
 router.get("/get-product-details/:id", getProductDetailsController);
+
+// Search Produts (By Name and Category)
+router.get("/search-product", searchProductController);
 
 //Export
 export default router;
