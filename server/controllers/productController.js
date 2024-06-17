@@ -372,3 +372,50 @@ export const searchProductController = async (req, res) => {
     });
   }
 };
+
+//***************** FILTER PRODUCT CONTROLLER ***************/
+export const filterProductController = async (req, res) => {
+  try {
+    const { priceSort, dateSort, categories } = req.query;
+
+    // Create a query
+    let query = {};
+
+    // Handle category filtering
+    if (categories) {
+      const categoryArray = categories.split(",");
+      query.category = {
+        $in: categoryArray,
+      };
+    }
+
+    // Create sort
+    let sort = {};
+
+    // Handle Price sort
+    if (priceSort) {
+      sort.sellingPrice = priceSort === "low-to-high" ? 1 : -1;
+    }
+
+    // Handle date sort
+    if (dateSort) {
+      sort.createdAt = dateSort === "newest" ? -1 : 1;
+    }
+
+    //Fetch product from the database
+    const products = await ProductModel.find(query).sort(sort);
+
+    // Success response
+    return res.status(200).json({
+      success: true,
+      totalProducts: products.length,
+      data: products,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error!",
+      error: err.message,
+    });
+  }
+};
