@@ -16,6 +16,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [searchProduct, setSearchProduct] = useState("");
 
   // ********** USER LOGOUT *******/
   const handleLogout = async () => {
@@ -43,6 +44,13 @@ const Header = () => {
     }
   };
 
+  //**************** SEARCH PRODUCT **************/
+  const handleSearchProduct = () => {
+    if (searchProduct) {
+      navigate(`/search-product?q=${searchProduct}`);
+    }
+  };
+
   return (
     <>
       <header className="bg-white h-16 shadow-md fixed top-0 right-0 left-0 z-50">
@@ -58,8 +66,13 @@ const Header = () => {
               type="text"
               placeholder="Search for products..."
               className="w-full px-3 py-1 border border-gray-300 rounded-l-lg focus:outline-none ring-2 focus:ring-indigo-500 focus-within:shadow-lg"
+              value={searchProduct}
+              onChange={(e) => setSearchProduct(e.target.value)}
             />
-            <div className="px-4 py-2 bg-indigo-500 text-white rounded-r-lg flex items-center justify-center cursor-pointer">
+            <div
+              onClick={handleSearchProduct}
+              className="px-4 py-2 bg-indigo-500 text-white rounded-r-lg flex items-center justify-center cursor-pointer"
+            >
               <TbShoppingCartSearch size={22} title="Search" />
             </div>
           </div>

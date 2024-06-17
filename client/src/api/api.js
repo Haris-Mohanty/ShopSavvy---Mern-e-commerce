@@ -257,7 +257,7 @@ export const countCartItems = async () => {
 // *************** GET CART ITEMS  ****************/
 export const getCartItems = async () => {
   try {
-    const response = await axios.get("cart/get-cart-items", {
+    const response = await axios.get("/cart/get-cart-items", {
       withCredentials: true,
     });
 
@@ -299,6 +299,21 @@ export const removeFromCart = async (cartItemId) => {
         withCredentials: true,
       }
     );
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// **** SEARCH PRODUCT (NAME AND CATEGORY) *****/
+export const searchProduct = async (query) => {
+  try {
+    const response = await axios.get(`/product/search-product?q=${query}`);
 
     if (response.status === 200) {
       return response.data;
