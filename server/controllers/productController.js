@@ -381,6 +381,12 @@ export const filterProductController = async (req, res) => {
     // Create a query
     let query = {};
 
+    if (!categories) {
+      return res.status(404).json({
+        success: false,
+      });
+    }
+
     // Handle category filtering
     if (categories) {
       const categoryArray = categories.split(",");
@@ -404,6 +410,13 @@ export const filterProductController = async (req, res) => {
 
     //Fetch product from the database
     const products = await ProductModel.find(query).sort(sort);
+
+    if (products.length === 0) {
+      return res.status(404).json({
+        success: true,
+        data: [],
+      });
+    }
 
     // Success response
     return res.status(200).json({

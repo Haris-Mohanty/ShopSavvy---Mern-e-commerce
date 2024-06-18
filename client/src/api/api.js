@@ -324,3 +324,24 @@ export const searchProduct = async (query) => {
     throw err;
   }
 };
+
+// ************ FILTER PRODUCT ******************/
+export const filterProduct = async (categories,priceSort, dateSort) => {
+  try {
+    const response = await axios.get("/product/filter-product", {
+      params: {
+        categories: categories.join(","),
+        priceSort,
+        dateSort,
+      },
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};

@@ -33,6 +33,7 @@ const SearchProductShow = () => {
 
   useEffect(() => {
     fetchSearchProducts();
+    //eslint-disable-next-line
   }, [searchQuery]);
 
   return (
@@ -48,7 +49,7 @@ const SearchProductShow = () => {
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mt-5">
           {searchResults.length === 0 ? (
-            <div className="flex flex-col items-center justify-center min-h-[60vh] border border-gray-200 rounded-lg bg-gray-100">
+            <div className="flex flex-col min-w-[94vw] md:ml-3 items-center justify-center min-h-[60vh] border border-gray-200 rounded-lg bg-gray-100">
               <BsExclamationCircle className="text-4xl text-gray-400 mb-4" />
               <p className="text-lg font-semibold text-gray-600">
                 No products found
@@ -63,7 +64,6 @@ const SearchProductShow = () => {
                 <Link
                   className="relative mx-3 flex flex-col h-24 md:h-60 overflow-hidden rounded-xl"
                   to={`/product-details/${item._id}`}
-                //   onClick={scrollTop}
                 >
                   <div className="overflow-y-scroll h-24 md:h-60 custom-scrollbar">
                     {item.productImage.map((img, index) => (
@@ -84,7 +84,7 @@ const SearchProductShow = () => {
                 </Link>
                 <div className="mt-1 px-3 pb-3">
                   <Link to={`/product-details/${item._id}`}>
-                    <h5 className="md:text-md text-sm tracking-tight font-semibold text-slate-700 text-ellipsis line-clamp-2 hover:text-indigo-600">
+                    <h5 className="md:text-base text-sm tracking-tight font-semibold text-slate-700 text-ellipsis line-clamp-2 hover:text-indigo-600">
                       {item.productName}
                     </h5>
                   </Link>
