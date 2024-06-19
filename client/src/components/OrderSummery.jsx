@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import displayInr from "../data/IndCur";
 import { Link } from "react-router-dom";
 
-const OrderSummery = ({ calculatePrice, calculateDiscount }) => {
+const OrderSummery = ({ calculatePrice, calculateDiscount, buttonName }) => {
   const { count } = useSelector((state) => state.cart);
 
   //*********** CALCULATE TAX **************/
@@ -57,7 +57,7 @@ const OrderSummery = ({ calculatePrice, calculateDiscount }) => {
             to="/address"
             className="flex w-full items-center justify-center rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300"
           >
-            Proceed to Checkout
+            {buttonName}
           </Link>
           <div className="flex items-center justify-center gap-2">
             <span className="text-sm font-normal text-gray-500"> or </span>

@@ -3,12 +3,21 @@ import { CiCircleCheck } from "react-icons/ci";
 import OrderSummery from "../components/OrderSummery";
 import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../redux/spinnerSlice";
-import { getCartItems } from "../api/api";
+import { createAddress, getCartItems } from "../api/api";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const Address = () => {
   const dispatch = useDispatch();
   const [cartItems, setCartItems] = useState([]);
+  const [houseNo, setHouseNo] = useState("");
+  const [area, setArea] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [district, setDistrict] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [landmark, setLandmark] = useState("");
 
   //************ FETCH CART ITMS **********/
   const fetchCartItems = async () => {
@@ -25,18 +34,74 @@ const Address = () => {
     }
   };
 
+  //************ CREATE NEW ADDRESS **********/
+  const handleCreateNewAddress = async (e) => {
+    e.preventDefault();
+    const data = {
+      houseNo,
+      area,
+      postalCode,
+      district,
+      state,
+      country,
+      phoneNumber,
+      landmark,
+    };
+    try {
+      dispatch(showLoading());
+      const res = await createAddress(data);
+      dispatch(hideLoading());
+      if (res.success) {
+        toast.success(res.message);
+      }
+    } catch (err) {
+      dispatch(hideLoading());
+      toast.error(err?.response?.data?.message);
+    }
+  };
+
+  //************ FETCH LOCATION DETAILS **********/
+  const fetchLocationDetails = async (postalCode) => {
+    try {
+      dispatch(showLoading());
+      const response = await axios.get(
+        process.env.REACT_APP_POSTAL_API + postalCode
+      );
+      const data = response.data[0].PostOffice[0];
+      dispatch(hideLoading());
+
+      if (response.status === 200 && data) {
+        setDistrict(data.District || "");
+        setState(data.State || "");
+        setCountry(data.Country || "India");
+      } else {
+        toast.error("Invalid postal code");
+      }
+    } catch (err) {
+      dispatch(hideLoading());
+      toast.error("Invalid postal code");
+    }
+  };
+
   useEffect(() => {
     fetchCartItems();
     //eslint-disable-next-line
   }, []);
 
-  //*********** CALCULATE ORIGINAL PRICE **************/
+  useEffect(() => {
+    if (postalCode.length === 6) {
+      fetchLocationDetails(postalCode);
+    }
+    //eslint-disable-next-line
+  }, [postalCode]);
+
+  //***** CALCULATE ORIGINAL PRICE *******/
   const calculatePrice = cartItems?.reduce(
     (total, item) => total + item.productId.price * item.quantity,
     0
   );
 
-  //*********** CALCULATE SAVING (DISCOUNT) **************/
+  //***** CALCULATE SAVING (DISCOUNT) *********/
   const calculateDiscount = cartItems?.reduce(
     (total, item) =>
       total +
@@ -64,7 +129,7 @@ const Address = () => {
               </li>
               <li className="flex shrink-0 items-center">
                 <CiCircleCheck className="me-2 h-4 w-4 sm:h-5 sm:w-5" />
-                Order summary
+                Payment
               </li>
             </ol>
 
@@ -77,18 +142,19 @@ const Address = () => {
             <div className="sm:mt-6 md:gap-4 lg:flex lg:items-start xl:gap-4">
               {/***************** DELIVERY ADDRESS ************************/}
               <div className="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
-                <form action="#" className="space-y-6">
+                <form onSubmit={handleCreateNewAddress} className="space-y-6">
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:p-6">
                     <div>
                       <label
-                        htmlFor="house_no"
+                        htmlFor="houseNo"
                         className="mb-2 block text-sm font-medium text-gray-900"
                       >
                         House No*
                       </label>
                       <input
                         type="text"
-                        id="house_no"
+                        value={houseNo}
+                        onChange={(e) => setHouseNo(e.target.value)}
                         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500"
                         placeholder="Enter House No"
                         required
@@ -104,8 +170,9 @@ const Address = () => {
                         Area*{" "}
                       </label>
                       <input
-                        type="email"
-                        id="area"
+                        type="text"
+                        value={area}
+                        onChange={(e) => setArea(e.target.value)}
                         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500"
                         placeholder="Enter area / colony"
                         required
@@ -121,8 +188,9 @@ const Address = () => {
                         Postal Code*{" "}
                       </label>
                       <input
-                        type="text"
-                        id="postalCode"
+                        type="number"
+                        value={postalCode}
+                        onChange={(e) => setPostalCode(e.target.value)}
                         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500"
                         placeholder="Enter postal code"
                         required
@@ -139,7 +207,8 @@ const Address = () => {
                       </label>
                       <input
                         type="text"
-                        id="district"
+                        value={district}
+                        onChange={(e) => setDistrict(e.target.value)}
                         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500"
                         placeholder="Enter district name"
                         required
@@ -156,7 +225,8 @@ const Address = () => {
                       </label>
                       <input
                         type="text"
-                        id="state"
+                        value={state}
+                        onChange={(e) => setState(e.target.value)}
                         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500"
                         placeholder="Enter state name"
                         required
@@ -173,7 +243,8 @@ const Address = () => {
                       </label>
                       <input
                         type="text"
-                        id="country"
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value)}
                         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500"
                         placeholder="Enter country name"
                         required
@@ -182,7 +253,7 @@ const Address = () => {
 
                     <div>
                       <label
-                        htmlFor="phone_number"
+                        htmlFor="phoneNo"
                         className="mb-2 block text-sm font-medium text-gray-900"
                       >
                         {" "}
@@ -198,7 +269,8 @@ const Address = () => {
                         <div className="relative w-full">
                           <input
                             type="text"
-                            id="phone_number"
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
                             className="z-20 block w-full rounded-e-lg border border-s-0 border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500"
                             pattern="[0-9]{10}"
                             placeholder="Enter Phone Number"
@@ -213,15 +285,14 @@ const Address = () => {
                         htmlFor="landmark"
                         className="mb-2 block text-sm font-medium text-gray-900"
                       >
-                        {" "}
-                        Landmark*{" "}
+                        Landmark
                       </label>
                       <input
                         type="text"
-                        id="landmark"
+                        value={landmark}
+                        onChange={(e) => setLandmark(e.target.value)}
                         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500"
                         placeholder="Enter landmark place"
-                        required
                       />
                     </div>
 
@@ -241,6 +312,7 @@ const Address = () => {
               <OrderSummery
                 calculatePrice={calculatePrice}
                 calculateDiscount={calculateDiscount}
+                buttonName={"Proceed to Payment"}
               />
             </div>
           </div>

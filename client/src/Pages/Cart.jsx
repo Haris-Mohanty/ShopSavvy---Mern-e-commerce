@@ -132,7 +132,7 @@ const Cart = () => {
                   </li>
                   <li className="flex shrink-0 items-center">
                     <CiCircleCheck className="me-2 h-4 w-4 sm:h-5 sm:w-5" />
-                    Order summary
+                    Payment
                   </li>
                 </ol>
 
@@ -259,6 +259,7 @@ const Cart = () => {
                   <OrderSummery
                     calculatePrice={calculatePrice}
                     calculateDiscount={calculateDiscount}
+                    buttonName={"Proceed to Checkout"}
                   />
                 </div>
               </div>
