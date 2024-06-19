@@ -2,7 +2,7 @@ import AddressModel from "../Models/AddressModel.js";
 import UserModel from "../Models/UserModel.js";
 import validator from "validator";
 
-//************ CREATE ADDRESS CONTROLLER *************/\
+//************ CREATE ADDRESS CONTROLLER *************/
 export const createAddressController = async (req, res) => {
   try {
     //Get User by userId
@@ -133,6 +133,48 @@ export const createAddressController = async (req, res) => {
       success: true,
       message: "Address created successfully",
       data: savedAddress,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error!",
+      error: err.message,
+    });
+  }
+};
+
+//************ GET ADDRESS OF USER CONTROLLER *************/
+export const getAddressOfUserController = async (req, res) => {
+  try {
+    //Get User by userId
+    const userId = req.user;
+
+    // Check user exist or not
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found!",
+      });
+    }
+
+    // Get address
+    const addresses = await AddressModel.find({ userId: userId }).populate(
+      "userId"
+    );
+
+    if (addresses.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No address found of this user!",
+      });
+    }
+
+    // Success Response
+    return res.status(200).json({
+      success: true,
+      count: addresses.length,
+      data: addresses,
     });
   } catch (err) {
     return res.status(500).json({
