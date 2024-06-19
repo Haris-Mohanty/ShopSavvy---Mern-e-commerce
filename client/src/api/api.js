@@ -326,7 +326,7 @@ export const searchProduct = async (query) => {
 };
 
 // ************ FILTER PRODUCT ******************/
-export const filterProduct = async (categories,priceSort, dateSort) => {
+export const filterProduct = async (categories, priceSort, dateSort) => {
   try {
     const response = await axios.get("/product/filter-product", {
       params: {
@@ -337,6 +337,23 @@ export const filterProduct = async (categories,priceSort, dateSort) => {
     });
 
     if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// ************ CREATE ADDRESS ******************/
+export const createAddress = async (data) => {
+  try {
+    const response = await axios.post("/address/create-address", data, {
+      withCredentials: true,
+    });
+
+    if (response.status === 201) {
       return response.data;
     } else {
       throw new Error(`Unexpected Error: ${response.statusText}`);
