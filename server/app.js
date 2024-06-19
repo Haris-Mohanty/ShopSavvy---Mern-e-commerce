@@ -9,6 +9,7 @@ import userRoutes from "./routes/userRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import cartItemRoutes from "./routes/cartItemRoutes.js";
+import addressRoutes from "./routes/addressRoutes.js";
 
 // **** Dotenv Config ****/
 dotenv.config();
@@ -36,6 +37,7 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/product", productRoutes);
 app.use("/api/v1/cart", cartItemRoutes);
+app.use("/api/v1/address", addressRoutes);
 
 // ********* Port & Listen *********/
 const port = process.env.PORT || 8080;
