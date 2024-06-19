@@ -114,14 +114,20 @@ const Header = () => {
                       Admin Panel
                     </Link>
                   ) : (
-                    <p
-                      onClick={() => {
-                        toast.error("Accessble by only admins!");
-                      }}
-                      className="block px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer"
-                    >
-                      Admin Panel
-                    </p>
+                    <>
+                      <Link
+                        to={"/my-orders"}
+                        className="block px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer"
+                      >
+                        My Orders
+                      </Link>
+                      <Link
+                        to={"/my-address"}
+                        className="block px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer"
+                      >
+                        My Address
+                      </Link>
+                    </>
                   )}
                 </div>
               )}

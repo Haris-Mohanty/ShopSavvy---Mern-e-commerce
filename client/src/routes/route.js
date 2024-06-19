@@ -12,6 +12,8 @@ import ProductCategory from "../Pages/ProductCategory";
 import ProductDetails from "../Pages/ProductDetails";
 import Cart from "../Pages/Cart";
 import SearchProductShow from "../Pages/SearchProductShow";
+import MyOrders from "../Pages/MyOrders";
+import MyAddress from "../Pages/MyAddress";
 
 // Create Routes
 const router = createBrowserRouter([
@@ -40,6 +42,22 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoutes>
             <Cart />
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "my-orders",
+        element: (
+          <ProtectedRoutes>
+            <MyOrders />
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "my-address",
+        element: (
+          <ProtectedRoutes>
+            <MyAddress />
           </ProtectedRoutes>
         ),
       },

@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { FaRegUserCircle, FaUsers, FaUpload } from "react-icons/fa";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const AdminPanel = () => {
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (!user?.isAdmin) {
+      navigate("/");
+    }
+    //eslint-disable-next-line
+  }, []);
   return (
     <>
       <div className="min-h-[calc(100vh-71px)] md:flex hidden mt-16">
