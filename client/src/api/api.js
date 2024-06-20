@@ -362,3 +362,41 @@ export const createAddress = async (data) => {
     throw err;
   }
 };
+
+// ************ GET ADDRESS ******************/
+export const getAddresses = async () => {
+  try {
+    const response = await axios.get("/address/get-address", {
+      withCredentials: true,
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// ************ UPDATE ADDRESS ******************/
+export const updateAddresses = async (id, data) => {
+  try {
+    const response = await axios.put(
+      "/address/update-address",
+      { id, ...data },
+      {
+        withCredentials: true,
+      }
+    );
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
