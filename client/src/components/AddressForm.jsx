@@ -13,21 +13,21 @@ const AddressForm = ({
 }) => {
   const dispatch = useDispatch();
 
-  const [houseNo, setHouseNo] = useState(address ? address.houseNo : " ");
-  const [area, setArea] = useState(address ? address.area : " ");
+  const [houseNo, setHouseNo] = useState(address ? address.houseNo : "");
+  const [area, setArea] = useState(address ? address.area : "");
   const [postalCode, setPostalCode] = useState(
-    address ? address.postalCode : " "
+    address ? address.postalCode : ""
   );
-  const [district, setDistrict] = useState(address ? address.district : " ");
-  const [state, setState] = useState(address ? address.state : " ");
-  const [country, setCountry] = useState(address ? address.country : " ");
+  const [district, setDistrict] = useState(address ? address.district : "");
+  const [state, setState] = useState(address ? address.state : "");
+  const [country, setCountry] = useState(address ? address.country : "");
   const [phoneNumber, setPhoneNumber] = useState(
-    address ? address.phoneNumber : " "
+    address ? address.phoneNumber : ""
   );
-  const [landMark, setLandmark] = useState(address ? address.landMark : " ");
+  const [landMark, setLandmark] = useState(address ? address.landMark : "");
 
   //************ CREATE NEW ADDRESS || UPDATE ADDRESS **********/
-  const handleCreateNewAddress = async (e) => {
+  const handleAddress = async (e) => {
     e.preventDefault();
     const data = {
       houseNo,
@@ -89,7 +89,7 @@ const AddressForm = ({
 
   return (
     <>
-      <form onSubmit={handleCreateNewAddress} className="space-y-6">
+      <form onSubmit={handleAddress} className="space-y-6">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:p-6">
           <div>
             <label
