@@ -400,3 +400,20 @@ export const updateAddresses = async (id, data) => {
     throw err;
   }
 };
+
+// ************ CREATE ORDER || PAYMENT ******************/
+export const createPayment = async (data) => {
+  try {
+    const response = await axios.post("/payment/create-payment", data, {
+      withCredentials: true,
+    });
+
+    if (response.status === 201) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
