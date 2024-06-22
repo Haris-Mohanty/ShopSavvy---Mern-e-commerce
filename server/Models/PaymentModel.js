@@ -28,19 +28,18 @@ const paymentSchema = new mongoose.Schema(
     },
     paymentId: {
       type: String,
-      required: true,
-      unique: true,
     },
     paymentMethod: {
       type: String,
-      enum: ["Credit Card", "Debit Card", "Net Banking", "UPI", "Wallet"],
+      enum: ["Online", "Cash On Delivery"],
       required: true,
     },
     paymentStatus: {
       type: String,
-      enum: ["Created", "Authorized", "Captured", "Refunded", "Failed"],
       default: "Created",
-      required: true,
+    },
+    paymentReceipt: {
+      type: String,
     },
     addressId: {
       type: mongoose.Schema.Types.ObjectId,
