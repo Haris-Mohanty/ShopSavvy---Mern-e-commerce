@@ -30,7 +30,7 @@ router.put("/update-cart-items", authMiddleware, updateCartItemsController);
 router.post("/remove-from-cart", authMiddleware, removeFromCartController);
 
 // Clear Cart
-router.post("/clear-cart-items", authMiddleware, clearCartItemsController);
+router.delete("/clear-cart-items", authMiddleware, clearCartItemsController);
 
 // Export
 export default router;

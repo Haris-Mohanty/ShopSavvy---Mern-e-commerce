@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CiCircleCheck } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import { hideLoading, showLoading } from "../redux/spinnerSlice";
-import { createPayment, getCartItems } from "../api/api";
+import { clearCartItems, createPayment, getCartItems } from "../api/api";
 import { toast } from "react-toastify";
 import displayInr from "../data/IndCur";
 import { Link, useNavigate } from "react-router-dom";
@@ -33,29 +33,33 @@ const Payment = () => {
     }
   };
 
+  //************ FETCH CART ITMS **********/
+  const clearCart = async () => {
+    try {
+      await clearCartItems();
+      dispatch(clearCartItemCount());
+    } catch (err) {
+      toast.error(err?.response?.data?.message);
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     fetchCartItems();
     //eslint-disable-next-line
   }, []);
 
-  //***** CALCULATE ORIGINAL PRICE *******/
   const calculatePrice = cartItems?.reduce(
     (total, item) => total + item.productId.price * item.quantity,
     0
   );
-
-  //***** CALCULATE SAVING (DISCOUNT) *********/
   const calculateDiscount = cartItems?.reduce(
     (total, item) =>
       total +
       (item.productId.price - item.productId.sellingPrice) * item.quantity,
     0
   );
-
-  //*********** CALCULATE TAX **************/
   const tax = Math.round(((calculatePrice - calculateDiscount) / 100) * 2);
-
-  //***** CALCULATE TOTAL PRICE *******/
   const totalPrice = calculatePrice - calculateDiscount + tax;
 
   //************ HANDLE PLACE ORDER OR MAKE PAYMENT **********/
@@ -81,9 +85,9 @@ const Payment = () => {
           const res = await createPayment(orderData);
           dispatch(hideLoading());
           if (res.success) {
-            dispatch(clearCartItemCount());
             toast.success("Order placed successfully!");
             navigate("/");
+            clearCart();
           } else {
             toast.error("Failed to place order");
           }

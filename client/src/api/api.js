@@ -417,3 +417,20 @@ export const createPayment = async (data) => {
     throw err;
   }
 };
+
+// ************ CLEAR CART ITEMS ******************/
+export const clearCartItems = async () => {
+  try {
+    const response = await axios.delete("/cart/clear-cart-items", {
+      withCredentials: true,
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
