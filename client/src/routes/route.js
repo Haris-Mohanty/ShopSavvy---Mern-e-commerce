@@ -15,6 +15,7 @@ import SearchProductShow from "../Pages/SearchProductShow";
 import MyOrders from "../Pages/MyOrders";
 import MyAddress from "../Pages/MyAddress";
 import Address from "../Pages/Address";
+import Payment from "../Pages/Payment";
 
 // Create Routes
 const router = createBrowserRouter([
@@ -51,6 +52,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoutes>
             <Address />
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "payment",
+        element: (
+          <ProtectedRoutes>
+            <Payment />
           </ProtectedRoutes>
         ),
       },

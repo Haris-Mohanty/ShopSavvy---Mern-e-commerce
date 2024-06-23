@@ -43,6 +43,13 @@ export const createPaymentController = async (req, res) => {
       });
     }
 
+    if (!addressId) {
+      return res.status(422).json({
+        success: false,
+        message: "Please select address!",
+      });
+    }
+
     // Validate Address
     const address = await AddressModel.findById(addressId);
     if (!address) {
@@ -88,7 +95,7 @@ export const createPaymentController = async (req, res) => {
     }
     const newPaymentOrder = await paymentDetails.save();
 
-    return res.status(200).json({
+    return res.status(201).json({
       success: true,
       data: newPaymentOrder,
     });
