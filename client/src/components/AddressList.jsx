@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import AddressForm from "./AddressForm";
+import { useDispatch } from "react-redux";
+import { setAddress } from "../redux/cartSlice";
 
 const AddressList = ({ addresses, setShowForm }) => {
-  const [selectedAddressIndex, setSelectedAddressIndex] = useState(0);
+  const dispatch = useDispatch();
+  const [selectedAddressIndex, setSelectedAddressIndex] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState(null);
 
-  const handleSelectAddress = (index) => {
+  const handleSelectAddress = (id, index) => {
     setSelectedAddressIndex(index);
+    dispatch(setAddress(id));
   };
 
   //************ EDIT AND UPDATE ADDRESS **********/
@@ -27,7 +31,7 @@ const AddressList = ({ addresses, setShowForm }) => {
                   ? "bg-blue-50 border-blue-400"
                   : "bg-white border-gray-200"
               }`}
-              onClick={() => handleSelectAddress(index)}
+              onClick={() => handleSelectAddress(address._id, index)}
             >
               <div className="flex items-start space-x-4 cursor-pointer">
                 <input
@@ -36,7 +40,7 @@ const AddressList = ({ addresses, setShowForm }) => {
                   id={`address-${index}`}
                   checked={selectedAddressIndex === index}
                   className="mt-1.5 h-4 w-4 text-primary-600 border-gray-300 focus:ring-primary-500"
-                  onChange={() => handleSelectAddress(index)}
+                  onChange={() => handleSelectAddress(address._id, index)}
                 />
                 <div>
                   <div className="md:flex gap-2 font-semibold text-gray-900 ">

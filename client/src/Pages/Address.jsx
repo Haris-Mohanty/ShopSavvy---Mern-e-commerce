@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { FiAlertCircle } from "react-icons/fi";
 import AddressList from "../components/AddressList";
 import AddressForm from "../components/AddressForm";
+import { Link } from "react-router-dom";
 
 const Address = () => {
   const dispatch = useDispatch();
@@ -73,10 +74,13 @@ const Address = () => {
           <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
             <ol className="items-center flex w-full max-w-2xl text-center text-sm font-medium text-gray-500 sm:text-base">
               <li className="after:border-1 flex items-center text-primary-700 font-bold after:mx-6 after:hidden after:h-1 after:w-full after:border-b after:border-gray-200 sm:after:inline-block sm:after:content-[''] md:w-full xl:after:mx-10">
-                <span className="flex items-center after:mx-2 after:text-gray-200 after:content-['/'] sm:after:hidden">
+                <Link
+                  to={"/cart"}
+                  className="flex items-center after:mx-2 after:text-gray-200 after:content-['/'] sm:after:hidden"
+                >
                   <CiCircleCheck className="me-2 h-4 w-4 sm:h-5 sm:w-5 stroke-2" />
                   Cart
-                </span>
+                </Link>
               </li>
               <li className="after:border-1 flex items-center text-primary-700 font-bold after:mx-6 after:hidden after:h-1 after:w-full after:border-b after:border-gray-200 sm:after:inline-block sm:after:content-[''] md:w-full xl:after:mx-10">
                 <span className="flex items-center after:mx-2 after:text-gray-200 after:content-['/'] sm:after:hidden">
@@ -140,6 +144,7 @@ const Address = () => {
                 calculatePrice={calculatePrice}
                 calculateDiscount={calculateDiscount}
                 buttonName={"Proceed to Payment"}
+                link={"/payment"}
               />
             </div>
           </div>

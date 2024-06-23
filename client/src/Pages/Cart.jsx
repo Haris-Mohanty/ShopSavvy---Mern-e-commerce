@@ -260,6 +260,7 @@ const Cart = () => {
                     calculatePrice={calculatePrice}
                     calculateDiscount={calculateDiscount}
                     buttonName={"Proceed to Checkout"}
+                    link={"/address"}
                   />
                 </div>
               </div>
