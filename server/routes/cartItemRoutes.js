@@ -6,6 +6,7 @@ import {
   getCartItemsController,
   updateCartItemsController,
   removeFromCartController,
+  clearCartItemsController,
 } from "../controllers/cartItemController.js";
 
 // Rourer obj
@@ -27,6 +28,9 @@ router.put("/update-cart-items", authMiddleware, updateCartItemsController);
 
 // Remove From Cart
 router.post("/remove-from-cart", authMiddleware, removeFromCartController);
+
+// Clear Cart
+router.post("/clear-cart-items", authMiddleware, clearCartItemsController);
 
 // Export
 export default router;

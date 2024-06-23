@@ -223,3 +223,41 @@ export const removeFromCartController = async (req, res) => {
     });
   }
 };
+
+//************ CLEAR CART ITEMS CONTROLLER ***********/
+export const clearCartItemsController = async (req, res) => {
+  try {
+    const userId = req.user;
+
+    // Validate user
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found!",
+      });
+    }
+
+    // Delete all cart items for the user
+    const deleteResult = await CartItemModel.deleteMany({ userId: userId });
+
+    if (deleteResult.deletedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No items found in the cart to clear!",
+      });
+    }
+
+    // Success response
+    return res.status(200).json({
+      success: true,
+      message: "Cart cleared successfully!",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error!",
+      error: err.message,
+    });
+  }
+};
