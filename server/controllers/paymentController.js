@@ -177,3 +177,44 @@ export const verifyPaymentController = async (req, res) => {
     });
   }
 };
+
+//************* GET MY ORDER || GET ORDER DETAILS ****/
+export const getMyOrdersController = async (req, res) => {
+  try {
+    const userId = req.user;
+
+    // Find user to ensure it exists
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Fetch orders for the user
+    const orders = await PaymentModel.find({ userId })
+      .populate("products.productId")
+      .populate("addressId");
+
+    // If no orders found
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No orders found for this user",
+      });
+    }
+
+    // Return success response with orders data
+    return res.status(200).json({
+      success: true,
+      data: orders,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error!",
+      error: err.message,
+    });
+  }
+};

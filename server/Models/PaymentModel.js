@@ -46,6 +46,11 @@ const paymentSchema = new mongoose.Schema(
       ref: "Address",
       required: true,
     },
+    orderStatus: {
+      type: String,
+      enum: ["Created", "Processing", "Shipped", "Delivered", "Cancelled"],
+      default: "Created",
+    },
   },
   { timestamps: true }
 );
