@@ -418,6 +418,23 @@ export const createPayment = async (data) => {
   }
 };
 
+// ************ VERIFY PAYMENT ******************/
+export const verifyPayment = async (data) => {
+  try {
+    const response = await axios.post("/payment/verify-payment", data, {
+      withCredentials: true,
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
 // ************ CLEAR CART ITEMS ******************/
 export const clearCartItems = async () => {
   try {
