@@ -143,7 +143,7 @@ export const verifyPaymentController = async (req, res) => {
     }
 
     // Find the payment record
-    const payment = await PaymentModel.findOne({ paymentId });
+    const payment = await PaymentModel.findOne({ paymentId: orderId });
     if (!payment) {
       return res.status(404).json({
         success: false,

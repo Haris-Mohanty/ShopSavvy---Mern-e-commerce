@@ -2,12 +2,18 @@ import React, { useEffect, useState } from "react";
 import { CiCircleCheck } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import { hideLoading, showLoading } from "../redux/spinnerSlice";
-import { clearCartItems, createPayment, getCartItems } from "../api/api";
+import {
+  clearCartItems,
+  createPayment,
+  getCartItems,
+  verifyPayment,
+} from "../api/api";
 import { toast } from "react-toastify";
 import displayInr from "../data/IndCur";
 import { Link, useNavigate } from "react-router-dom";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { clearCartItemCount } from "../redux/cartSlice";
+import paymentLogo from "../Assets/paymentLogo.png";
 
 const Payment = () => {
   const dispatch = useDispatch();
@@ -64,88 +70,97 @@ const Payment = () => {
 
   //************ HANDLE PLACE ORDER OR MAKE PAYMENT **********/
   const handlePlaceOrder = async () => {
+    if (!address) {
+      toast.error("Please select an address");
+      navigate("/address");
+      return;
+    }
+
     if (paymentMethod === null) {
       toast.error("Please select a payment method");
-    } else if (paymentMethod === "Cash On Delivery") {
-      try {
-        if (!address) {
-          toast.error("Please select an address");
-          navigate("/address");
-        } else {
-          dispatch(showLoading());
-          const orderData = {
-            products: cartItems.map((item) => ({
-              productId: item.productId._id,
-              quantity: item.quantity,
-            })),
-            amount: totalPrice,
-            paymentMethod,
-            addressId: address,
-          };
-          const res = await createPayment(orderData);
-          dispatch(hideLoading());
-          if (res.success) {
-            toast.success("Order placed successfully!");
-            navigate("/");
-            clearCart();
-          } else {
-            toast.error("Failed to place order");
-          }
-        }
-      } catch (err) {
-        dispatch(hideLoading());
-        toast.error(err?.response?.data?.message);
-        console.log(err);
+      return;
+    }
+
+    const orderData = {
+      products: cartItems.map((item) => ({
+        productId: item.productId._id,
+        quantity: item.quantity,
+      })),
+      amount: totalPrice,
+      paymentMethod,
+      addressId: address,
+    };
+
+    try {
+      dispatch(showLoading());
+      const res = await createPayment(orderData);
+      dispatch(hideLoading());
+      if (!res.success) {
+        toast.error("Failed to place order");
+        return;
       }
-    } else if (paymentMethod === "Online") {
-      //   const options = {
-      //     key: "YOUR_RAZORPAY_KEY_ID", // Replace with your Razorpay key ID
-      //     amount: totalPrice * 100, // Amount in paisa
-      //     currency: "INR",
-      //     name: "Your Company Name",
-      //     description: "Test Transaction",
-      //     image: "/your_logo.png", // Replace with your logo URL
-      //     order_id: "order_9A33XWu170gUtm", // Replace with generated order_id
-      //     handler: async (response) => {
-      //       try {
-      //         const orderData = {
-      //           products: cartItems.map((item) => ({
-      //             productId: item.productId._id,
-      //             quantity: item.quantity,
-      //           })),
-      //           amount: totalPrice,
-      //           paymentMethod,
-      //           paymentId: response.razorpay_payment_id,
-      //           addressId: address,
-      //         };
-      //         const res = await createPayment(orderData);
-      //         if (res.success) {
-      //           toast.success("Payment successful and order placed!");
-      //           navigate("/");
-      //         } else {
-      //           toast.error("Failed to place order");
-      //         }
-      //       } catch (err) {
-      //         toast.error(err?.response?.data?.message);
-      //       }
-      //     },
-      //     prefill: {
-      //       name: "Your Name",
-      //       email: "your_email@example.com",
-      //       contact: "9999999999",
-      //     },
-      //     notes: {
-      //       address: "Your Address",
-      //     },
-      //     theme: {
-      //       color: "#3399cc",
-      //     },
-      //   };
-      //   const rzp = new Razorpay(options);
-      //   rzp.on("payment.failed", (response) => {
-      //     toast.error("Payment failed");
-      //   });
-      //   rzp.open();
+
+      if (paymentMethod === "Cash On Delivery") {
+        toast.success("Order placed successfully!");
+        navigate("/my-orders");
+        clearCart();
+      } else if (paymentMethod === "Online") {
+        const { paymentId, amount } = res.data;
+
+        const options = {
+          key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+          amount: amount * 100,
+          currency: "INR",
+          name: "Shop Savvy",
+          description: "Shop Smart, Shop Savvy",
+          image: paymentLogo,
+          order_id: paymentId,
+          handler: async function (response) {
+            try {
+              const paymentData = {
+                orderId: response.razorpay_order_id,
+                paymentId: response.razorpay_payment_id,
+                signature: response.razorpay_signature,
+              };
+              dispatch(showLoading());
+              const paymentRes = await verifyPayment(paymentData);
+              dispatch(hideLoading());
+
+              if (paymentRes.success) {
+                toast.success("Order placed successfully!");
+                navigate("/my-orders");
+                clearCart();
+              } else {
+                toast.error("Payment verification failed");
+              }
+            } catch (err) {
+              dispatch(hideLoading());
+              toast.error(
+                err?.response?.data?.message || "Payment verification failed"
+              );
+            }
+          },
+          prefill: {
+            name: "Shop Savvy",
+            email: "shop@savvy.com",
+            contact: "9000010000",
+          },
+          notes: {
+            address: "New Delhi",
+          },
+          theme: {
+            color: "#3F51B5",
+          },
+        };
+        const rzp = new window.Razorpay(options);
+        rzp.on("payment.failed", (response) => {
+          toast.error("Payment failed");
+        });
+        rzp.open();
+      }
+    } catch (err) {
+      dispatch(hideLoading());
+      toast.error(err?.response?.data?.message);
     }
   };
 
