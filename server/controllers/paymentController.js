@@ -3,6 +3,7 @@ import PaymentModel from "../Models/PaymentModel.js";
 import UserModel from "../Models/UserModel.js";
 import razorpayInstance from "../config/paymentConfig.js";
 import validator from "validator";
+import crypto from "crypto";
 
 //************* CHECK OUT || PLACE ORDER || PAYMENT ****/
 export const createPaymentController = async (req, res) => {
@@ -111,6 +112,63 @@ export const createPaymentController = async (req, res) => {
 //************* VERIFY PAYMENT AND SAVE DATA ************/
 export const verifyPaymentController = async (req, res) => {
   try {
+    const { orderId, paymentId, signature } = req.body;
+
+    // Validate required fields
+    if (!orderId || !paymentId || !signature) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
+    // Verify if RAZORPAY_KEY_SECRET is available
+    if (!process.env.RAZORPAY_KEY_SECRET) {
+      return res.status(500).json({
+        success: false,
+        message: "Razorpay key secret is not configured",
+      });
+    }
+
+    // Verify signature
+    const hmac = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET);
+    hmac.update(`${orderId}|${paymentId}`);
+    const generatedSignature = hmac.digest("hex");
+
+    if (generatedSignature !== signature) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid signature",
+      });
+    }
+
+    // Find the payment record
+    const payment = await PaymentModel.findOne({ paymentId });
+    if (!payment) {
+      return res.status(404).json({
+        success: false,
+        message: "Payment not found",
+      });
+    }
+
+    // Check if the payment is already marked as "Paid"
+    if (payment.paymentStatus === "Paid") {
+      return res.status(200).json({
+        success: true,
+        message: "Payment is already verified",
+        data: payment,
+      });
+    }
+
+    // Update payment status in the database
+    payment.paymentStatus = "Paid";
+    await payment.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Payment verified successfully",
+      data: payment,
+    });
   } catch (err) {
     return res.status(500).json({
       success: false,
