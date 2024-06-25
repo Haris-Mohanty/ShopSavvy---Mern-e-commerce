@@ -451,3 +451,37 @@ export const clearCartItems = async () => {
     throw err;
   }
 };
+
+// ************ GET MY ORDERS ******************/
+export const getMyOrders = async () => {
+  try {
+    const response = await axios.get("/payment/get-my-orders", {
+      withCredentials: true,
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// ************ GET MY ORDERS ******************/
+export const orderCancel = async (orderId) => {
+  try {
+    const response = await axios.put("/payment/cancel-order", {orderId}, {
+      withCredentials: true,
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};

@@ -223,7 +223,7 @@ export const getMyOrdersController = async (req, res) => {
 export const cancelOrderController = async (req, res) => {
   try {
     const userId = req.user;
-    const { orderId } = req.params;
+    const { orderId } = req.body;
 
     // Find user to ensure it exists
     const user = await UserModel.findById(userId);
