@@ -218,3 +218,54 @@ export const getMyOrdersController = async (req, res) => {
     });
   }
 };
+
+//************* CANCEL ORDER ***************/
+export const cancelOrderController = async (req, res) => {
+  try {
+    const userId = req.user;
+    const { orderId } = req.params;
+
+    // Find user to ensure it exists
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Find the order to ensure it exists
+    const order = await PaymentModel.findOne({ _id: orderId, userId });
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    // Check if the order is already cancelled
+    if (order.orderStatus === "Cancelled") {
+      return res.status(400).json({
+        success: false,
+        message: "Order is already cancelled",
+      });
+    }
+
+    // Update the order status to "Cancelled"
+    order.orderStatus = "Cancelled";
+    order.updatedAt = new Date();
+    await order.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Order cancelled successfully",
+      data: order,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error!",
+      error: err.message,
+    });
+  }
+};

@@ -18,5 +18,8 @@ router.post("/verify-payment", authMiddleware, verifyPaymentController);
 // Get Order details || My orders
 router.get("/get-my-orders", authMiddleware, getMyOrdersController);
 
+// Cancel Order
+router.put("/cancel-order", authMiddleware, cancelOrderController);
+
 // Export router
 export default router;
