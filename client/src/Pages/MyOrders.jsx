@@ -2,12 +2,18 @@ import React, { useEffect, useState } from "react";
 import ProgressBar from "../components/ProgressBar"; // Adjust the path as necessary
 import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../redux/spinnerSlice";
-import { getMyOrders, orderCancel } from "../api/api";
+import {
+  getMyOrders,
+  orderCancel,
+  updateOrderPayment,
+  verifyPayment,
+} from "../api/api";
 import { toast } from "react-toastify";
 import displayInr from "../data/IndCur";
 import { Link, useNavigate } from "react-router-dom";
 import itemsAddToCart from "../data/itemsAddToCart";
 import Invoice from "../components/Invoice";
+import paymentLogo from "../Assets/paymentLogo.png";
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -48,22 +54,94 @@ const MyOrders = () => {
     }
   };
 
+  //************** PAY NOW || UPDATE PAYMENT **************/
+  const payNowHandler = async (order) => {
+    const orderData = {
+      orderId: order._id,
+      amount: order.amount,
+      paymentMethod: "Online",
+    };
+    try {
+      dispatch(showLoading());
+      const res = await updateOrderPayment(orderData);
+      dispatch(hideLoading());
+
+      if (res.success) {
+        const options = {
+          key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+          amount: res.data.amount * 100,
+          currency: "INR",
+          name: "Shop Savvy",
+          description: "Shop Smart, Shop Savvy",
+          image: paymentLogo,
+          order_id: res.data.paymentId,
+          handler: async function (response) {
+            try {
+              const verificationData = {
+                orderId: response.razorpay_order_id,
+                paymentId: response.razorpay_payment_id,
+                signature: response.razorpay_signature,
+              };
+              const verificationRes = await verifyPayment(verificationData);
+
+              if (verificationRes.success) {
+                toast.success("Order placed successfully!");
+                fetchMyOrders();
+              } else {
+                toast.error("Payment verification failed");
+              }
+            } catch (err) {
+              dispatch(hideLoading());
+              toast.error(
+                err?.response?.data?.message || "Payment verification failed"
+              );
+            }
+          },
+          prefill: {
+            name: "Shop Savvy",
+            email: "shop@savvy.com",
+            contact: "9000010000",
+          },
+          notes: {
+            address: "New Delhi",
+          },
+          theme: {
+            color: "#3F51B5",
+          },
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.on("payment.failed", function (response) {
+          toast.error(response.error.description);
+        });
+        rzp.open();
+      } else {
+        toast.error(res.message);
+      }
+    } catch (err) {
+      dispatch(hideLoading());
+      toast.error(err?.response?.data?.message);
+    }
+  };
+
   useEffect(() => {
     fetchMyOrders();
     //eslint-disable-next-line
   }, []);
 
-  //************  HANDLE SHOW INVOICE ********/
+  //*******  HANDLE SHOW INVOICE ********/
   const handleShowInvoice = (invoice) => {
     setSelectedInvoice(invoice);
     setIsInvoiceModalOpen(true);
   };
 
-  //************  HANDLE BUY PRODUCT ********/
+  //*******  HANDLE BUY PRODUCT ********/
   const handleBuyNow = async (id, dispatch) => {
     await itemsAddToCart(id, dispatch);
     navigate("/cart");
   };
+
+  console.log(orders);
 
   return (
     <div className="container mx-auto mt-16">
@@ -129,7 +207,11 @@ const MyOrders = () => {
                       Show Invoice
                     </button>
                   ) : (
-                    <button className="bg-green-700 text-white px-4 py-2 rounded-md transition duration-200 ease-in-out hover:bg-green-800">
+                    <button
+                      type="button"
+                      onClick={() => payNowHandler(order)}
+                      className="bg-green-700 text-white px-4 py-2 rounded-md transition duration-200 ease-in-out hover:bg-green-800"
+                    >
                       Pay Now
                     </button>
                   )}
@@ -191,6 +273,9 @@ const MyOrders = () => {
                           Buy Again
                         </button>
                       </div>
+                      <p className="flex justify-end text-sm font-semibold text-indigo-900 mt-2  md:-mt-8">
+                        Quantity: {product.quantity}
+                      </p>
                     </div>
                   </div>
                 ))}

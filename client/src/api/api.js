@@ -472,7 +472,28 @@ export const getMyOrders = async () => {
 // ************ GET MY ORDERS ******************/
 export const orderCancel = async (orderId) => {
   try {
-    const response = await axios.put("/payment/cancel-order", {orderId}, {
+    const response = await axios.put(
+      "/payment/cancel-order",
+      { orderId },
+      {
+        withCredentials: true,
+      }
+    );
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// ************ UPDATE ORDER PAYMENT ******************/
+export const updateOrderPayment = async (data) => {
+  try {
+    const response = await axios.post("/payment/update-payment", data, {
       withCredentials: true,
     });
 

@@ -5,6 +5,7 @@ import {
   verifyPaymentController,
   getMyOrdersController,
   cancelOrderController,
+  updateOrderPaymentController,
 } from "../controllers/paymentController.js";
 
 // Create router obj
@@ -21,6 +22,9 @@ router.get("/get-my-orders", authMiddleware, getMyOrdersController);
 
 // Cancel Order
 router.put("/cancel-order", authMiddleware, cancelOrderController);
+
+// Update order payment
+router.post("/update-payment", authMiddleware, updateOrderPaymentController);
 
 // Export router
 export default router;

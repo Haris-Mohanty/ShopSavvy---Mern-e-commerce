@@ -89,9 +89,11 @@ export const createPaymentController = async (req, res) => {
         products,
         userId,
         amount,
+        paymentId: "",
         paymentMethod,
         paymentStatus: "Authorized",
         addressId,
+        paymentReceipt: "",
       });
     }
     const newPaymentOrder = await paymentDetails.save();
@@ -260,6 +262,66 @@ export const cancelOrderController = async (req, res) => {
       success: true,
       message: "Order cancelled successfully",
       data: order,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error!",
+      error: err.message,
+    });
+  }
+};
+
+//************* UPDATE ORDER PAYMENT DETAILS ************/
+export const updateOrderPaymentController = async (req, res) => {
+  try {
+    const { orderId, paymentMethod, amount } = req.body;
+    const userId = req.user;
+
+    // Find user to ensure it exists
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Find the order to ensure it exists
+    const order = await PaymentModel.findOne({ _id: orderId, userId });
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    if (paymentMethod === "Online") {
+      // Online payment setup (Razorpay)
+      const options = {
+        amount: amount * 100, // amount in paisa
+        currency: "INR",
+        receipt: `order_${Date.now()}`,
+      };
+      const response = await razorpayInstance.orders.create(options);
+
+      // Update Payment Order in Database
+      order.paymentId = response.id;
+      order.paymentMethod = paymentMethod;
+      order.paymentStatus = response.status;
+      order.paymentReceipt = response.receipt;
+    } else {
+      // If switching back to COD, update payment method and status
+      order.paymentMethod = paymentMethod;
+      order.paymentStatus = "Authorized";
+    }
+
+    const updatedOrder = await order.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Order payment details updated successfully",
+      data: updatedOrder,
     });
   } catch (err) {
     return res.status(500).json({
