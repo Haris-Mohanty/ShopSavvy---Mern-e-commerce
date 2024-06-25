@@ -8,12 +8,12 @@ const ProgressBar = ({ currentStatus }) => {
 
   return (
     <div className="w-full mt-4">
-      <div className="flex justify-between mb-1 text-xs sm:text-sm">
+      <div className="flex justify-between mb-1 text-xs md:text-base">
         {statusSteps.map((status, index) => (
           <span
             key={index}
             className={`${
-              currentIndex >= index && !isCancelled ? 'text-primary-700' : 'text-gray-400'
+              currentIndex >= index && !isCancelled ? 'text-indigo-700 font-semibold' : 'text-gray-400'
             }`}
           >
             {status}
@@ -23,7 +23,7 @@ const ProgressBar = ({ currentStatus }) => {
       <div className="relative w-full h-2 bg-gray-300 rounded">
         <div
           className={`absolute top-0 left-0 h-2 ${
-            isCancelled ? 'bg-red-600' : 'bg-primary-700'
+            isCancelled ? 'bg-red-600' : 'bg-indigo-700'
           } rounded`}
           style={{ width: isCancelled ? '100%' : `${(currentIndex / (statusSteps.length - 1)) * 100}%` }}
         ></div>
