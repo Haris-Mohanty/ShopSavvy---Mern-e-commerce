@@ -506,3 +506,24 @@ export const updateOrderPayment = async (data) => {
     throw err;
   }
 };
+
+// ************ DELETE ADDRESS ******************/
+export const deleteAddress = async (addressId) => {
+  try {
+    const response = await axios.post(
+      "/address/delete-address",
+      { addressId },
+      {
+        withCredentials: true,
+      }
+    );
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};

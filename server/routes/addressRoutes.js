@@ -20,7 +20,7 @@ router.get("/get-address", authMiddleware, getAddressOfUserController);
 router.put("/update-address", authMiddleware, updateAddressController);
 
 // Delete Address
-router.delete("/delete-address", authMiddleware, deleteAddressController);
+router.post("/delete-address", authMiddleware, deleteAddressController);
 
 //Export
 export default router;
