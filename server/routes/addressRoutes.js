@@ -4,6 +4,7 @@ import {
   createAddressController,
   getAddressOfUserController,
   updateAddressController,
+  deleteAddressController,
 } from "../controllers/addressController.js";
 
 // Create router obj
@@ -17,6 +18,9 @@ router.get("/get-address", authMiddleware, getAddressOfUserController);
 
 // Update address
 router.put("/update-address", authMiddleware, updateAddressController);
+
+// Delete Address
+router.delete("/delete-address", authMiddleware, deleteAddressController);
 
 //Export
 export default router;

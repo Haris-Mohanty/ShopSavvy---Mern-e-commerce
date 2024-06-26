@@ -330,3 +330,56 @@ export const updateAddressController = async (req, res) => {
     });
   }
 };
+
+//************ DELETE ADDRESS CONTROLLER *************/
+export const deleteAddressController = async (req, res) => {
+  try {
+    //Get User by userId
+    const userId = req.user;
+
+    // Check user exist or not
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found!",
+      });
+    }
+
+    const { addressId } = req.body;
+
+    // Validate address ID
+    if (!addressId) {
+      return res.status(400).json({
+        success: false,
+        message: "Address ID is required",
+      });
+    }
+
+    // Find the address by ID and user ID to ensure the user owns the address
+    const address = await AddressModel.findOneAndDelete({
+      _id: addressId,
+      userId: userId,
+    });
+
+    if (!address) {
+      return res.status(404).json({
+        success: false,
+        message:
+          "Address not found or you do not have permission to delete this address",
+      });
+    }
+
+    // Success res
+    return res.status(200).json({
+      success: true,
+      message: "Address deleted successfully",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error!",
+      error: err.message,
+    });
+  }
+};
