@@ -527,3 +527,41 @@ export const deleteAddress = async (addressId) => {
     throw err;
   }
 };
+
+// *************** GET ALL ORDERS ****************/
+export const getAllOrders = async (page) => {
+  try {
+    const response = await axios.get(`/admin/get-all-orders?page=${page}`, {
+      withCredentials: true,
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+// *************** UPDATE ORDER STATUS ****************/
+export const updateOrderStatus = async (orderId, status) => {
+  try {
+    const response = await axios.put(
+      "/admin/update-status",
+      { orderId, status },
+      {
+        withCredentials: true,
+      }
+    );
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};

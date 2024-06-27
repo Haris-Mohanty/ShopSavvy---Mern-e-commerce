@@ -1,6 +1,11 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { FaRegUserCircle, FaUsers, FaUpload } from "react-icons/fa";
+import {
+  FaRegUserCircle,
+  FaUsers,
+  FaUpload,
+  FaShoppingCart,
+} from "react-icons/fa";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const AdminPanel = () => {
@@ -57,6 +62,15 @@ const AdminPanel = () => {
                 >
                   <FaUpload />
                   <span>All Products</span>
+                </Link>
+              </li>
+              <li className="py-2 px-4 flex items-center hover:bg-gray-200">
+                <Link
+                  to="all-orders"
+                  className="text-indigo-600 flex items-center space-x-2"
+                >
+                  <FaShoppingCart />
+                  <span>All Orders</span>
                 </Link>
               </li>
             </ul>

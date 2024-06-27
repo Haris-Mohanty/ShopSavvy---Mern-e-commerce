@@ -16,6 +16,7 @@ import MyOrders from "../Pages/MyOrders";
 import MyAddress from "../Pages/MyAddress";
 import Address from "../Pages/Address";
 import Payment from "../Pages/Payment";
+import AllOrders from "../Pages/AllOrders";
 
 // Create Routes
 const router = createBrowserRouter([
@@ -89,6 +90,7 @@ const router = createBrowserRouter([
         children: [
           { path: "all-users", element: <AllUsers /> },
           { path: "all-products", element: <AllProducts /> },
+          { path: "all-orders", element: <AllOrders /> },
         ],
       },
       {
