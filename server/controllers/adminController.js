@@ -164,7 +164,9 @@ export const getAllOrdersController = async (req, res) => {
     const allOrders = await PaymentModel.find(filters)
       .skip(skip)
       .limit(limit)
-      .lean();
+      .populate("products.productId")
+      .populate("addressId")
+      .populate("userId");
 
     return res.status(200).json({
       success: true,
@@ -172,6 +174,55 @@ export const getAllOrdersController = async (req, res) => {
       totalPages: totalPages,
       currentPage: page,
       data: allOrders,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error!",
+      error: err.message,
+    });
+  }
+};
+
+//*********** UPDATE ORDER STATUS CONTROLLER *****************/
+export const updateOrderStatusController = async (req, res) => {
+  try {
+    const userId = req.user;
+    const user = await UserModel.findById(userId);
+
+    // Check is the user is admin or not
+    if (!user || !user.isAdmin) {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied. Admins only.",
+      });
+    }
+
+    const { orderId, status } = req.body;
+
+    const order = await PaymentModel.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    const validStatuses = [
+      "Created",
+      "Processing",
+      "Shipped",
+      "Delivered",
+      "Cancelled",
+    ];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: "Invalid status" });
+    }
+
+    order.orderStatus = status;
+    await order.save();
+
+    return res.status(200).json({
+      success: true,
+      data: order,
+      message: "Order status updated successfully",
     });
   } catch (err) {
     return res.status(500).json({
