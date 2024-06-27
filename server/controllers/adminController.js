@@ -232,3 +232,52 @@ export const updateOrderStatusController = async (req, res) => {
     });
   }
 };
+
+//*********** DELETE ORDER CONTROLLER *****************/
+export const deleteOrderController = async (req, res) => {
+  try {
+    const userId = req.user;
+    const user = await UserModel.findById(userId);
+
+    // Check is the user is admin or not
+    if (!user || !user.isAdmin) {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied. Admins only.",
+      });
+    }
+
+    const { orderId } = req.body;
+
+    // Validate orderId
+    if (!orderId) {
+      return res.status(400).json({
+        success: false,
+        message: "Order ID is required.",
+      });
+    }
+
+    // Get order
+    const order = await PaymentModel.findById(orderId);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found.",
+      });
+    }
+
+    // Perform delete operation
+    await PaymentModel.findByIdAndDelete(orderId);
+
+    return res.status(200).json({
+      success: true,
+      message: "Order deleted successfully.",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error!",
+      error: err.message,
+    });
+  }
+};

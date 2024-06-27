@@ -6,6 +6,7 @@ import {
   deleteUserController,
   getAllOrdersController,
   updateOrderStatusController,
+  deleteOrderController,
 } from "../controllers/adminController.js";
 
 // Router Obj
@@ -25,6 +26,9 @@ router.get("/get-all-orders", authMiddleware, getAllOrdersController);
 
 // Update Order status
 router.put("/update-status", authMiddleware, updateOrderStatusController);
+
+// Delete Order
+router.post("/delete-order", authMiddleware, deleteOrderController);
 
 //Export
 export default router;
