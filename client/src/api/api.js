@@ -565,3 +565,24 @@ export const updateOrderStatus = async (orderId, status) => {
     throw err;
   }
 };
+
+// ********* DELETE ORDER **************/
+export const deleteOrder = async (orderId) => {
+  try {
+    const response = await axios.post(
+      "/admin/delete-order",
+      { orderId },
+      {
+        withCredentials: true,
+      }
+    );
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unexpected Error: ${response.statusText}`);
+    }
+  } catch (err) {
+    throw err;
+  }
+};
