@@ -20,12 +20,15 @@ const AllOrders = () => {
   const [totalPages, setTotalPages] = useState(0);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+
+  const [sortOrder, setSortOrder] = useState("asc");
 
   //************* FETCH ALL ORDERS ***********/
   const fetchAllOrders = async (page) => {
     try {
       dispatch(showLoading());
-      const res = await getAllOrders(page);
+      const res = await getAllOrders(sortOrder, page);
       dispatch(hideLoading());
       if (res.success) {
         setAllOrders(res.data);
@@ -85,44 +88,42 @@ const AllOrders = () => {
 
   // Open Modal
   const openModal = (order) => {
+    setSelectedOrder(order);
     setIsModalOpen(true);
-    console.log(order);
   };
 
   // Close modal
   const closeModal = () => {
+    setSelectedOrder(null);
     setIsModalOpen(false);
   };
 
   useEffect(() => {
     fetchAllOrders(currentPage);
     //eslint-disable-next-line
-  }, [currentPage]);
+  }, [currentPage, sortOrder]);
   return (
     <>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <div className="flex shadow-lg rounded-sm justify-between items-center py-4 px-2 bg-white">
           <h1 className="text-3xl font-semibold text-indigo-500">ALL ORDERS</h1>
           <div className="flex items-center space-x-4">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <CiSearch />
-              </div>
-              <input
-                type="text"
-                id="table-search-orders"
-                className="block pl-10 pr-4 py-2 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:outline-none"
-                placeholder="Search for orders"
-              />
-            </div>
             <div className="flex items-center space-x-2">
               <button className="flex items-center px-3 py-2 text-sm font-medium text-white bg-indigo-500 rounded-lg hover:bg-indigo-600">
                 <AiOutlineFilter className="mr-2" /> Filters
               </button>
-              <button className="flex items-center px-3 py-2 text-sm font-medium text-white bg-green-500 rounded-lg hover:bg-green-600">
+              <button
+                type="button"
+                onClick={() => setSortOrder("asc")}
+                className="flex items-center px-3 py-2 text-sm font-medium text-white bg-green-500 rounded-lg hover:bg-green-600"
+              >
                 <FaSortAmountUp className="mr-2" /> Sort Asc
               </button>
-              <button className="flex items-center px-3 py-2 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600">
+              <button
+                type="button"
+                onClick={() => setSortOrder("desc")}
+                className="flex items-center px-3 py-2 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600"
+              >
                 <FaSortAmountDown className="mr-2" /> Sort Desc
               </button>
             </div>
@@ -245,7 +246,7 @@ const AllOrders = () => {
         </table>
 
         {/*************** Show Order Modal *************/}
-        {isModalOpen && (
+        {isModalOpen && selectedOrder && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
             <div
               tabIndex={-1}
@@ -253,12 +254,12 @@ const AllOrders = () => {
               className="relative w-full max-w-2xl max-h-full"
             >
               <div className="relative w-full max-w-2xl max-h-full">
-                {/************** Modal content ***************/}
+                {/* Modal content */}
                 <div className="relative bg-white rounded-lg shadow">
-                  {/************* Modal header ***********/}
+                  {/* Modal header */}
                   <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                      Show Order Details
+                      Order Details
                     </h3>
                     <button
                       type="button"
@@ -269,9 +270,95 @@ const AllOrders = () => {
                       <span className="sr-only">Close modal</span>
                     </button>
                   </div>
-                  {/*********** Modal body ***********/}
+                  {/* Modal body */}
                   <div className="p-6 space-y-6">
-                    <div className="grid grid-cols-6 gap-6">jndn</div>
+                    <div className="grid grid-cols-2 gap-6">
+                      <div>
+                        <h4 className="font-semibold">Order ID:</h4>
+                        <p>
+                          {selectedOrder.paymentId
+                            ? selectedOrder.paymentId
+                            : selectedOrder._id}
+                        </p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold">Customer Name:</h4>
+                        <p>{selectedOrder.userId.name}</p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold">Email:</h4>
+                        <p>{selectedOrder.userId.email}</p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold">Order Date:</h4>
+                        <p>
+                          {moment(selectedOrder.createdAt).format(
+                            "MMMM Do YYYY"
+                          )}
+                        </p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold">Total Amount:</h4>
+                        <p>{displayInr(selectedOrder.amount)}</p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold">Payment Method:</h4>
+                        <p>{selectedOrder.paymentMethod}</p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold">Payment Status:</h4>
+                        <p>{selectedOrder.paymentStatus}</p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold">Order Status:</h4>
+                        <p>{selectedOrder.orderStatus}</p>
+                      </div>
+                      {selectedOrder.addressId && (
+                        <div>
+                          <h4 className="font-semibold">Shipping Address:</h4>
+                          <p>
+                            {selectedOrder.addressId.houseNo},{" "}
+                            {selectedOrder.addressId.area},{" "}
+                            {selectedOrder.addressId.district},{" "}
+                            {selectedOrder.addressId.state},{" "}
+                            {selectedOrder.addressId.country} -{" "}
+                            {selectedOrder.addressId.postalCode}
+                          </p>
+                        </div>
+                      )}
+                      <div>
+                        <h4 className="font-semibold">Products:</h4>
+                        <ul>
+                          {selectedOrder.products.map((product) => (
+                            <li key={product._id} className="mb-2">
+                              <div className="flex items-center">
+                                <img
+                                  src={product.productId.productImage[0]}
+                                  alt={product.productId.productName}
+                                  className="w-14 h-14 object-scale-down mr-2"
+                                />
+                                <div className="flex flex-col">
+                                  <div className="font-medium text-gray-900 truncate w-60">
+                                    {product.productId.productName}
+                                  </div>
+                                  <div className="text-gray-500 flex">
+                                    <span className="mr-1">
+                                      Quantity: {product.quantity}
+                                    </span>
+                                    <span>
+                                      Price:{" "}
+                                      {displayInr(
+                                        product.productId.sellingPrice
+                                      )}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

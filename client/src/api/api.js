@@ -529,11 +529,14 @@ export const deleteAddress = async (addressId) => {
 };
 
 // *************** GET ALL ORDERS ****************/
-export const getAllOrders = async (page) => {
+export const getAllOrders = async (sort, page) => {
   try {
-    const response = await axios.get(`/admin/get-all-orders?page=${page}`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(
+      `/admin/get-all-orders?sort=${sort}&page=${page}`,
+      {
+        withCredentials: true,
+      }
+    );
 
     if (response.status === 200) {
       return response.data;

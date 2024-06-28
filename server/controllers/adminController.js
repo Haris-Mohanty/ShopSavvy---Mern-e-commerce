@@ -150,6 +150,10 @@ export const getAllOrdersController = async (req, res) => {
     // Search
     const filters = {};
 
+    // Sort order
+    const sortOrder = req.query.sort || "asc";
+    const sort = sortOrder === "asc" ? { amount: 1 } : { amount: -1 };
+
     // Get total orders for counting total pages
     const totalOrders = await PaymentModel.countDocuments(filters);
     const totalPages = Math.ceil(totalOrders / limit);
@@ -162,6 +166,7 @@ export const getAllOrdersController = async (req, res) => {
 
     // Get all orders
     const allOrders = await PaymentModel.find(filters)
+      .sort(sort)
       .skip(skip)
       .limit(limit)
       .populate("products.productId")
