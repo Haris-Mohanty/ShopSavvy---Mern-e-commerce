@@ -55,11 +55,11 @@ const Invoice = ({ isOpen, onClose, invoice }) => {
                   <p className="text-gray-500 text-xs md:text-sm">
                     {user.name}
                     <br />
-                    {invoice.addressId.houseNo}, {invoice.addressId.area},{" "}
-                    {invoice.addressId.district}, {invoice.addressId.state}
+                    {invoice.addressId?.houseNo || "N/A"}, {invoice.addressId?.area || "N/A"},{" "}
+                    {invoice.addressId?.district || "N/A"}, {invoice.addressId?.state || "N/A"}
                   </p>
                   <p className="text-gray-500 text-xs md:text-sm">
-                    Mob: {invoice.addressId.phoneNumber}
+                    Mob: {invoice.addressId?.phoneNumber || "N/A"}
                   </p>
                 </div>
                 <div className="text-right text-xs md:text-sm">

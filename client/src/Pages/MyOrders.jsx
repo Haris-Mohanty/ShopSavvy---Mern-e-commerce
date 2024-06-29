@@ -299,14 +299,17 @@ const MyOrders = () => {
                   </h4>
                   <div className="md:flex md:gap-2 md:mt-2 text-gray-600">
                     <p>
-                      {order.addressId.houseNo}, {order.addressId.area},{" "}
-                      {order.addressId.landmark}
+                      {order.addressId?.houseNo || "N/A"},{" "}
+                      {order.addressId?.area || "N/A"},{" "}
+                      {order.addressId?.landmark || "N/A"}
                     </p>
                     <p>
-                      {order.addressId.district}, {order.addressId.state},{" "}
-                      {order.addressId.country}, {order.addressId.postalCode}
+                      {order.addressId?.district || "N/A"},{" "}
+                      {order.addressId?.state || "N/A"},{" "}
+                      {order.addressId?.country || "N/A"},{" "}
+                      {order.addressId?.postalCode || "N/A"}
                     </p>
-                    <p>Phone: {order.addressId.phoneNumber}</p>
+                    <p>Phone: {order.addressId?.phoneNumber || "N/A"}</p>
                   </div>
                 </div>
               </div>

@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../redux/spinnerSlice";
 import { toast } from "react-toastify";
 import { deleteOrder, getAllOrders, updateOrderStatus } from "../api/api";
-import { CiSearch } from "react-icons/ci";
 import { AiOutlineFilter } from "react-icons/ai";
 import { FaSortAmountUp, FaSortAmountDown } from "react-icons/fa";
 import { RiDeleteBinLine, RiEyeLine } from "react-icons/ri";
