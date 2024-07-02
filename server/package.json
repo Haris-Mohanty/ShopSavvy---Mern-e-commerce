@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/Haris-Mohanty/ShopSavvy---Mern-e-commerce#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

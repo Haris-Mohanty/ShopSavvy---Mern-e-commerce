@@ -301,7 +301,6 @@ const MyOrders = () => {
                     <p>
                       {order.addressId?.houseNo || "N/A"},{" "}
                       {order.addressId?.area || "N/A"},{" "}
-                      {order.addressId?.landmark || "N/A"}
                     </p>
                     <p>
                       {order.addressId?.district || "N/A"},{" "}

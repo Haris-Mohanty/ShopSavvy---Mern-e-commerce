@@ -80,7 +80,7 @@ const MyAddress = () => {
               <div className="flex flex-col items-center justify-center min-h-[40vh] text-center">
                 <h2 className="text-2xl font-semibold mb-2">
                   No address found
-                </h2>
+                </h2> 
                 <p className="mb-4 text-gray-500 px-4">
                   Looks like you haven't added any address.
                 </p>
