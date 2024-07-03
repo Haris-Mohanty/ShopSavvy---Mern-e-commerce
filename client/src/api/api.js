@@ -29,7 +29,7 @@ export const loginUserApi = async (data) => {
       withCredentials: true,
     });
 
-    if (response.status === 200) {
+    if (response.status === 201) {
       return response.data;
     } else {
       throw new Error(`Unexpected Error: ${response.statusText}`);
@@ -63,11 +63,7 @@ export const logoutUser = async () => {
       withCredentials: true,
     });
 
-    if (response.status === 200) {
-      return response.data;
-    } else {
-      throw new Error(`Unexpected Error: ${response.statusText}`);
-    }
+    return response.data;
   } catch (err) {
     throw err;
   }

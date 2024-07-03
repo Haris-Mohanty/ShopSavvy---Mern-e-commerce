@@ -140,12 +140,12 @@ export const loginUser = async (req, res) => {
 
     // Login Success
     return res
+      .status(201)
       .cookie("token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        samesite: "None",
+        secure: process.env.NODE_ENV === "production", // Ensure secure flag is set in production
+        sameSite: "None", // Required for cross-site cookie
       })
-      .status(200)
       .json({
         success: true,
         user,
@@ -198,17 +198,10 @@ export const getUserDetailsController = async (req, res) => {
 // *************** LOGOUT USER CONTROLLER ***************/
 export const logoutController = async (req, res) => {
   try {
-    return res
-      .cookie("token", "", {
-        expires: new Date(Date.now()),
-        httpOnly: true,
-        secure: true,
-      })
-      .status(200)
-      .json({
-        message: "User Logged out Successfully!",
-        success: true,
-      });
+    return res.cookie("token", "", { expiresIn: new Date(Date.now()) }).json({
+      message: "User Logged out Successfully!",
+      success: true,
+    });
   } catch (err) {
     return res.status(500).json({
       success: false,
