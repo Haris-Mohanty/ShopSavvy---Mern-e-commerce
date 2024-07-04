@@ -15,7 +15,7 @@ Welcome to ShopSavvy! This is an E-commerce Platform designed to provide a seaml
 
 ## Deployment
 
-The application is deployed on Netlify and can be accessed at [ShopSavvy](https://#.com).
+The application is deployed on Netlify and can be accessed at [ShopSavvy](https://shop-savvy.netlify.app/).
 
 ## Installation
 
