@@ -40,14 +40,6 @@ export const registerUser = async (req, res) => {
       });
     }
 
-    // Profile photo validation
-    if (!profilePic) {
-      return res.status(422).json({
-        success: false,
-        message: "Please provide a profile photo.",
-      });
-    }
-
     // Check existing user
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
