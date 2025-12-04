@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  frontend:
+  build:
+    context: ./client
+    dockerfile: Dockerfile
+  container_name: react-client
+  ports:
+    - '3000:3000'
+  env_file:
+    - ./client/.env
+  depends_on:
+    - backend
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: express-server
+    ports:
+      - '8080:8080'
+    env_file:
+      - ./server/.env
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:7
+    container_name: mongo-db
+    restart: always
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
