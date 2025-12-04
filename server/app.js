@@ -43,7 +43,7 @@ app.use("/api/v1/payment", paymentRoutes);
 
 // ********* Port & Listen *********/
 const port = process.env.PORT || 8080;
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(
     `Node server running in ${process.env.DEV_MODE} mode on Port ${port}.`
       .bgBrightBlue.white

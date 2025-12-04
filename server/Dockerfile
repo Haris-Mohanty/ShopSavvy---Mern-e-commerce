@@ -1,18 +1,21 @@
-# Step 1: Use Node official image
-FROM node:22-alpine
+# Use Node 22 base image (non-Alpine is easier for native packages)
+FROM node:22
 
-# Step 2: Set working directory inside container
+# Set working directory inside the container
 WORKDIR /app
 
-# Step 3: Copy package.json and install dependencies
+# Copy package.json and package-lock (if present) and install deps
 COPY package*.json ./
 RUN npm install
 
-# Step 4: Copy all backend source code to container
+# Copy the rest of your app source
 COPY . .
 
-# Step 5: Expose backend port
+# Set default environment variable (can be overridden at runtime)
+ENV PORT=8080
+
+# Expose the port the app listens on
 EXPOSE 8080
 
-# Step 6: Start the server
+# Start the app
 CMD ["npm", "start"]
