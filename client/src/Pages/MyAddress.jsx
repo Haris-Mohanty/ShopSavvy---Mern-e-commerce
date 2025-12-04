@@ -29,7 +29,7 @@ const MyAddress = () => {
     }
   };
 
-  //************ FETCH CREATED ADDRESSES **********/
+  //************ DELETE ADDRESSES **********/
   const handleDeleteAddress = async (addressId) => {
     try {
       dispatch(showLoading());

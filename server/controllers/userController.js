@@ -40,6 +40,7 @@ export const registerUser = async (req, res) => {
       });
     }
 
+    
     // Check existing user
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
@@ -62,8 +63,8 @@ export const registerUser = async (req, res) => {
     });
     await user.save();
     return res.status(201).json({
-      success: true,
-      message: "User registered successfully!",
+    success: true,
+    message: "User registered successfully!",
     });
   } catch (err) {
     return res.status(500).json({
